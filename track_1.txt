@@ -1,0 +1,11 @@
+set bpm=90
+set scale=major
+
+kd play (xv)::, lpf=500
+hh play -, dur=1/4, amp=[0.2:1.2]n
+kk play ::[::][::][::]::., lpf=[700:900]l40, rate=[0.8:1.2]n
+
+ba dbass 0, dur=1/4, att=0, lpf=[1000:100]e, hpf=[0:250]n, add=[4,8,12]
+pad dbass 0, dur=1, att=0, lpf=[1000:100]e, hpf=[0:250]n, add=[8], phaser=1.5
+
+pd dsaw (-303), dur=1/4, envelope=pad, amp=[0:1/2]s32@f, room=2, lpf=[1000:3000]s64@f, oct=4, addc=[4,4,4]s[12,8,12]
