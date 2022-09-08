@@ -1,0 +1,10 @@
+//MINIMALIST LIVE CODING by @srothst1 
+set bpm=110
+v clouds 7 //1 -> 7 
+
+d1 play x-o- //off -> on with Ba1
+d2 play 1, dur = 8
+
+p1 dsaw 02, add=(-2,2,0), dur=8,reverb=4, amp=[0.75:1.00:0.75]n
+Ba dbass [-2,-4]n, dur=1/4, add=[12,(16,12),12], lpf={[4:16]l*125,q:6}, att=0,swing=250,reverb=4
+Ba1 dbass [-4,-4,-2]r, dur=1/4, add=[12,16,[14,16,20,20]r], lpf={[4:16]l*200,q:8}, att=0,phaser=0,swing=0 //1/4 -> 1/6
