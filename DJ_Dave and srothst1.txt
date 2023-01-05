@@ -20,12 +20,12 @@ end
 define :master do
   # Drums
   drum1 # 1
-  ##| drum0 # 2
-  ##| drum2 # 3
+  drum0 # 2
+  drum2 # 3
   # Instruments
   pentatonicMirror(0.25) # 1
-  ##| deepBaseline # 2
-  ##| brightShuffle # 3
+  deepBaseline # 2
+  brightShuffle # 3
 end
 
 master
@@ -39,7 +39,7 @@ define :brightShuffle do
         c = 130
         p = 0 # (line -0.7, 0.7, steps: 64).mirror.tick
         at = 0.01
-        use_synth :beep
+        use_synth :prophet #:beep #:prophet
         tick
         notes = (scale :g4, :major_pentatonic).shuffle
         play notes.look, amp: a, release: r, cutoff: c, pan: p, attack: at, detune: 0.08
