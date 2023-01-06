@@ -17,18 +17,33 @@ define :pattern do |pattern|
   return pattern.ring.tick == "x"
 end
 
-define :master do
-  # Drums
-  drum1 # 1
-  drum0 # 2
-  drum2 # 3
-  # Instruments
-  pentatonicMirror(0.25) # 1
-  deepBaseline # 2
-  brightShuffle # 3
+define :prettyBlade do |note|
+  use_synth :blade
+  print note
+  play chord(note, :major), rate: 1, pitch: 1.25, amp: 3.25, release: 3, num_slices: 30, decay: 3
+  sleep 2
 end
 
-master
+define :samIsNice do
+  with_fx :echo do
+    2.times do
+      1.times do
+        # sample "/Users/srothst1/Desktop/sam_is_nice.wav", rate: 1, pitch: 1.25, amp: 3.25, release: 3, num_slices: 30, decay: 3
+        use_synth :blade
+        play chord(:E3, :major), rate: 1, pitch: 1.25, amp: 3.25, release: 3, num_slices: 30, decay: 3
+        sleep 2
+      end
+      sleep 1
+      ##| 2.times do
+      ##|   # sample "/Users/srothst1/Desktop/sam_is_nice.wav", rate: 1, pitch: 1.25, amp: 3.25, release: 3, num_slices: 30, decay: 3
+      ##|   use_synth :blade
+      ##|   play chord(:E54, :maj9), rate: 1, pitch: 1.25, amp: 3.25, release: 3, num_slices: 30, decay: 3
+      ##|   sleep 2
+      ##| end
+      sleep 32
+    end
+  end
+end
 
 define :brightShuffle do
   with_fx :reverb, mix: 0.7 do
@@ -36,8 +51,8 @@ define :brightShuffle do
       with_fx :echo, phase: 1 do
         a = 0.6
         r = 0.25
-        c = 130
-        p = 0 # (line -0.7, 0.7, steps: 64).mirror.tick
+        c = 100
+        p = 0
         at = 0.01
         use_synth :prophet #:beep #:prophet
         tick
@@ -125,3 +140,20 @@ define :drum1 do
     end
   end
 end
+
+define :master do
+  # Drums
+  drum1 # 1
+  drum0 # 2
+  ##| drum2 # 3
+  
+  # Instruments
+  pentatonicMirror(0.25) # 1
+  deepBaseline # 2
+  brightShuffle # 3
+  
+  ##| samIsNice
+  ##| prettyBlade(:E4)
+end
+
+master
