@@ -1,0 +1,123 @@
+# Coded srothst1
+# Inspired by: https://sonic-pi.mehackit.org/exercises/en/11-templates/04-simple-slow-techno.html
+
+use_bpm 130
+
+live_loop :met1 do
+  sleep 1
+end
+
+cmaster1 = 130
+cmaster2 = 130
+
+define :pattern do |pattern|
+  return pattern.ring.tick == "x"
+end
+
+
+define :drum2 do
+  live_loop :kick, sync: :met1 do
+    with_fx :reverb do
+      a = 0.30
+      sample :sn_zome, amp: a, cutoff: cmaster1 if pattern "x---------------x---------------"
+      sleep 0.25
+    end
+  end
+end
+
+define :drum0 do
+  with_fx :echo, mix: 0.2 do
+    with_fx :echo, mix: 0.2 do
+      with_fx :reverb, mix: 0.2, room: 0.5 do
+        live_loop :clap, sync: :met1 do
+          a = 0.25
+          sleep 2
+          sample :drum_snare_soft, rate: 2.2, start: 0.02, cutoff: cmaster1, pan: 0.2, amp: a
+          sample :drum_snare_soft, rate: 2, start: 0.04, cutoff: cmaster1, pan: -0.2, amp: a
+          sleep 2
+        end
+      end
+    end
+  end
+end
+
+define :drum1 do
+  with_fx :reverb, mix: 0.2 do
+    with_fx :panslicer, mix: 0.2 do
+      live_loop :hhc1, sync: :met1 do
+        a = 0.50
+        p = [-0.35, 0.35].choose
+        sample :drum_cymbal_closed, amp: a, rate: 2.5, finish: 0.5, pan: p, cutoff: cmaster2 if pattern "x---x---x---x---x---x---x---x---"
+        sleep 0.125
+      end
+    end
+  end
+end
+
+define :dsawLover do
+  live_loop :pulputus do
+    with_fx :reverb, amp: 1, mix: 0.25 do
+      s = 0.375
+      4.times do
+        use_synth :dsaw
+        play (chord :C2, :minor).choose, cutoff: rrand(50, 70), release: 0.5, amp: 0.5, release: 0.75
+        sleep s
+      end
+      2.times do
+        use_synth :dsaw
+        play (chord :C3, :minor).choose, cutoff: rrand(70, 100), release: 0.5, amp: 0.5, release: 0.75
+        sleep s
+      end
+      4.times do
+        use_synth :dsaw
+        play (chord :C2, :minor).choose, cutoff: rrand(50, 70), release: 0.5, amp: 0.5, release: 0.75
+        sleep s
+      end
+      2.times do
+        use_synth :dsaw
+        play (chord :C1, :minor).choose, cutoff: rrand(50, 70), release: 0.5, amp: 0.5, release: 0.75
+        sleep s
+      end
+    end
+  end
+end
+
+define :dsawLoverSteady do
+  live_loop :pulputus do
+    with_fx :reverb, amp: 1, mix: 0.25 do
+      4.times do
+        use_synth :dsaw
+        play (chord :C2, :minor), cutoff: rrand(50, 70), release: 0.5, amp: 0.5, release: 0.75
+        sleep 0.5
+      end
+      2.times do
+        use_synth :dsaw
+        play (chord :C3, :minor), cutoff: rrand(70, 100), release: 0.5, amp: 0.5, release: 0.75
+        sleep 0.5
+      end
+      4.times do
+        use_synth :dsaw
+        play (chord :C2, :minor), cutoff: rrand(50, 70), release: 0.5, amp: 0.5, release: 0.75
+        sleep 0.5
+      end
+      2.times do
+        use_synth :dsaw
+        play (chord :C4, :minor), cutoff: rrand(50, 70), release: 0.5, amp: 0.5, release: 0.75
+        sleep 0.5
+      end
+    end
+  end
+end
+
+define :master do
+  # Drums
+  ##| drum1 # 1
+  ##| drum0 # 2
+  ##| drum2 # 3
+  
+  # Detuned Saw Wave Synth
+  dsawLover
+  ##| dsawLoverSteady
+end
+
+master
