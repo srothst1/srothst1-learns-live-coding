@@ -163,10 +163,10 @@ end
 define :chords do
   live_loop :pulputus do
     sync :snares
-    sleep 3.25
+    ##| sleep 3.25
     sleep synth_rhythm.tick
-    with_fx :ixi_techno, mix: 0.25, phase: 2, phase_offset: 0, cutoff_max: 80, cutoff_min: 60 do
-      am = 1.00
+    with_fx :ixi_techno, mix: 0.25, phase: 2, phase_offset: 0, cutoff_max: 100, cutoff_min: 80 do
+      am = 2.00
       s = 0.25
       rel = 1.25
       synth = :blade
@@ -192,15 +192,22 @@ end
 define :chords2 do
   live_loop :pulputus do
     sync :snares
+    ##| sleep 3.25
     sleep synth_rhythm.tick
-    with_fx :ixi_techno, mix: 0.25, phase: 2, phase_offset: 0, cutoff_max: 80, cutoff_min: 60 do
-      am = 1.00
+    with_fx :ixi_techno, mix: 0.25, phase: 2, phase_offset: 0.25, cutoff_max: 80, cutoff_min: 60 do
+      am = 0.30
       s = 0.25
       rel = 1.25
-      synth = :blade
-      3.times do
+      synth = :chipbass #:blade
+      4.times do
         use_synth synth
-        play (chord :D4, :minor, num_octaves: 2).choose, cutoff: rrand(50, 70), amp: am, release: rel
+        play (chord :d3, :minor, num_octaves: 2).choose, cutoff: rrand(50, 70), amp: am, release: rel
+        sleep s
+      end
+      sleep 2*s
+      2.times do
+        use_synth synth
+        play (chord :d4, :minor, num_octaves: 1).choose, cutoff: rrand(50, 60), amp: am, release: rel
         sleep s
       end
     end
