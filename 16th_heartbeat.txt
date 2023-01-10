@@ -145,14 +145,14 @@ define :butterfly do
 end
 
 define :keyNote do |note|
-  with_fx :echo, amp: 0.5, mix: 0.3,
-  decay: 8, phase: synth_phases.look do
+  with_fx :echo, amp: 0.6, mix: 0.3,
+  decay: 4, phase: synth_phases.look do
     with_fx :reverb, room: 0.7, damp: 0.8 do
       with_transpose synth_transpositions.look do
         cutoff = synth_cutoffs.look
         with_fx :ixi_techno, phase: 1, res: 0.3 do
           with_synth :mod_tri do
-            play note, attack: 0.1, amp: 0.375
+            play note, attack: 0.3, amp: 0.5
           end
         end
       end
@@ -208,6 +208,10 @@ define :chords2 do
   end
 end
 
+defin :samplePlay do
+  sample "/Users/srothst1/Desktop/sam_is_nice.wav"
+end
+
 define :main do
   drums
   
@@ -219,7 +223,7 @@ define :main do
     msynth if (note == 21)
     msynthOff if (note == 17)
     butterfly if (note == 22)
-    play 40 if (note == 18)
+    samplePlay if (note == 18)
     chords if (note == 23)
     chords2 if (note == 19)
     keyNote note if (note != 20 and note != 16 and note != 21 and note != 17 and note != 22 and note != 18 and note != 23 and note != 19)
