@@ -158,7 +158,6 @@ define :keyNote do |note|
       end
     end
   end
-  
 end
 
 define :chords do
@@ -208,8 +207,36 @@ define :chords2 do
   end
 end
 
-defin :samplePlay do
-  sample "/Users/srothst1/Desktop/sam_is_nice.wav"
+define :samplePlay do
+  live_loop :arpShuffle, sync: :kick do
+    sleep 3
+  end
+  with_fx :reverb do
+    with_fx :flanger do
+      sample "/Users/srothst1/Desktop/sam_is_nice.wav", rate: 0.85, amp: 1.75, pitch: 1.25
+      sleep 0.25
+      sample "/Users/srothst1/Desktop/sam_is_nice.wav", rate: 0.85, amp: 1.75, pitch: 1.23
+    end
+  end
+end
+
+define :brightShuffle do
+  with_fx :reverb, mix: 0.7 do
+    live_loop :arpShuffle, sync: :kick do
+      with_fx :echo, phase: 1 do
+        a = 0.6
+        r = 0.25
+        c = 100
+        p = 0
+        at = 0.01
+        use_synth :prophet #:beep #:prophet
+        tick
+        notes = (scale :d3, :minor).shuffle
+        play notes.look, amp: a, release: r, cutoff: c, pan: p, attack: at, detune: 0.08
+        sleep 0.75
+      end
+    end
+  end
 end
 
 define :main do
@@ -222,7 +249,8 @@ define :main do
     baseline2 if (note == 16)
     msynth if (note == 21)
     msynthOff if (note == 17)
-    butterfly if (note == 22)
+    # butterfly if (note == 22)
+    brightShuffle if (note == 22)
     samplePlay if (note == 18)
     chords if (note == 23)
     chords2 if (note == 19)
