@@ -86,26 +86,48 @@ live_loop :synth do
   end
 end
 
-live_loop :synth2 do
-  sync :kick
-  ch = invert_chord(dchord, rand_i(3))
-  sleep synth_rhythm.tick
-  with_fx :echo, amp: synth_volume-0.2, mix: 0.3,
-  decay: 8, phase: synth_phases.look do
-    with_fx :pan, pan: synth_pans.look do
-      with_fx :reverb, room: 0.7, damp: 0.8 do
-        with_synth_defaults attack: 0.05, release: 0.3 do
-          with_transpose synth_transpositions.look do
-            cutoff = synth_cutoffs.look
-            with_fx :ixi_techno, cutoff_min: cutoff,
-            cutoff_max: cutoff - 30, phase: 1, res: 0.3 do
-              with_synth :mod_beep do
-                play chord(:d4, :minor, num_octaves: 2).choose, attack: 0.1
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-end
+# TODO: limit this to 8 times?
+##| live_loop :synth2 do
+##|   sync :kick
+##|   sleep synth_rhythm.tick
+##|   with_fx :echo, amp: 0.1, mix: 0.3,
+##|   decay: 8, phase: synth_phases.look do
+##|     with_fx :reverb, room: 0.7, damp: 0.8 do
+##|       with_transpose synth_transpositions.look do
+##|         cutoff = synth_cutoffs.look
+##|         with_fx :ixi_techno, phase: 1, res: 0.3 do
+##|           with_synth :mod_tri do
+##|             play chord(:d3, :minor, num_octaves: 2).choose, attack: 0.1, amp: 0.375
+##|           end
+##|         end
+##|       end
+##|     end
+##|   end
+##| end
+
+##| live_loop :pulputus do
+##|   sync :snares
+##|   sleep 7.5
+##|   sleep synth_rhythm.tick
+##|   with_fx :ixi_techno, mix: 0.25, phase: 2, phase_offset: 0, cutoff_max: 80, cutoff_min: 60 do
+##|     am = 0.4
+##|     s = 0.25
+##|     rel = 1.25
+##|     synth = :blade
+##|     4.times do
+##|       use_synth synth
+##|       play (chord :D3, :minor), cutoff: rrand(50, 70), amp: am, release: rel - 0.75
+##|       sleep s
+##|     end
+##|     2.times do
+##|       use_synth synth
+##|       play (chord :D4, :minor), cutoff: rrand(70, 100), amp: am, release: rel - 0.5
+##|       sleep s
+##|     end
+##|     4.times do
+##|       use_synth synth
+##|       play (chord :D3, :minor), cutoff: rrand(50, 70), amp: am, release: rel - 0.25
+##|       sleep s
+##|     end
+##|   end
+##| end
