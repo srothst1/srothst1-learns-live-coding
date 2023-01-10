@@ -53,11 +53,11 @@ live_loop :revbassline do
   sleep 0.5
 end
 
-dchord = chord(:d2, :minor, num_octaves: 3)
+dchord = chord(:d3, :minor, num_octaves: 3)
 synth_cutoffs = range(60, 100, 0.5).mirror
 synth_rhythm = (ring 1.5, 1.5, 1)
 synth_transpositions = (stretch 0, 36) + (stretch -12, 6) + (stretch 12, 6)
-synth_phases = (stretch 0.75, 15) + [0.25]
+synth_phases = (stretch 0.75, 15) + [2.5]
 synth_pans = (ring -0.5, 0.5)
 live_loop :synth do
   sync :kick
@@ -77,6 +77,30 @@ live_loop :synth do
             cutoff_max: cutoff - 30, phase: 1, res: 0.3 do
               with_synth :dsaw do
                 play_chord ch, attack: 0.1
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+live_loop :synth2 do
+  sync :kick
+  ch = invert_chord(dchord, rand_i(3))
+  sleep synth_rhythm.tick
+  with_fx :echo, amp: synth_volume-0.2, mix: 0.3,
+  decay: 8, phase: synth_phases.look do
+    with_fx :pan, pan: synth_pans.look do
+      with_fx :reverb, room: 0.7, damp: 0.8 do
+        with_synth_defaults attack: 0.05, release: 0.3 do
+          with_transpose synth_transpositions.look do
+            cutoff = synth_cutoffs.look
+            with_fx :ixi_techno, cutoff_min: cutoff,
+            cutoff_max: cutoff - 30, phase: 1, res: 0.3 do
+              with_synth :mod_beep do
+                play chord(:d4, :minor, num_octaves: 2).choose, attack: 0.1
               end
             end
           end
