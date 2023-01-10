@@ -14,69 +14,101 @@ pad_volume = 1
 beep_volume = 0.5
 
 kick_cutoffs = range(50, 80, 0.5).mirror # A LFO for the poor
-live_loop :kick do
-  if (spread 1, 4).tick then # 4-on-the-floor
-    sample :bd_tek, amp: master.look * kick_volume,
-      cutoff: kick_cutoffs.look
-  end
-  sleep 0.25 # 16th note heartbeat
+define :snare do |amp|
+  sample :sn_dolf, amp: amp, start: 0.15, finish: 0.35, rate: 0.7
 end
-
-live_loop :snares do
-  sleep 1
-  snare 1 * master.tick * snare_volume
-  sleep 1
-end
-
 bassline_rhythm = (ring 1, 0, 0, 0, 1, 0, 0, 0,
                    1, 0, 0.5, 0, 1, 0, 0.5, 0)
 bassline_notes = (stretch [:d1] * 12 + [:f1, :f1, :a1, :f1], 8)
-live_loop :bassline do
-  sync :kick
-  with_synth :fm do
-    play bassline_notes.look,
-      amp: master.look * bassline_rhythm.tick * bass_volume,
-      attack: 0.03, divisor: 1, depth: 2.5
-  end
-  sleep 0.25
-end
-
-live_loop :revbassline do
-  sync :snares
-  sleep 7.5
-  with_fx :pan, pan: -0.5 do
-    with_synth :fm do
-      play :d1, amp: bass_volume * master.tick,
-        attack: 0.5, divisor: 0.5, depth: 6
-    end
-  end
-  sleep 0.5
-end
-
 dchord = chord(:d3, :minor, num_octaves: 3)
 synth_cutoffs = range(60, 100, 0.5).mirror
 synth_rhythm = (ring 1.5, 1.5, 1)
 synth_transpositions = (stretch 0, 36) + (stretch -12, 6) + (stretch 12, 6)
 synth_phases = (stretch 0.75, 15) + [2.5]
 synth_pans = (ring -0.5, 0.5)
-live_loop :synth do
-  sync :kick
-  ch = invert_chord(dchord, rand_i(3))
-  sleep synth_rhythm.tick
-  with_fx :echo, amp: synth_volume * master.look, mix: 0.3,
-  decay: 8, phase: synth_phases.look do
-    with_fx :pan, pan: synth_pans.look do
-      with_fx :reverb, room: 0.7, damp: 0.8 do
-        with_synth_defaults attack: 0.05, release: 0.3 do
-          with_transpose synth_transpositions.look do
-            with_synth :sine do
-              play_chord ch
-            end
-            cutoff = synth_cutoffs.look
-            with_fx :ixi_techno, cutoff_min: cutoff,
-            cutoff_max: cutoff - 30, phase: 1, res: 0.3 do
-              with_synth :dsaw do
-                play_chord ch, attack: 0.1
+
+define :drums do
+  live_loop :kick do
+    if (spread 1, 4).tick then # 4-on-the-floor
+      sample :bd_tek, amp: master.look * kick_volume,
+        cutoff: kick_cutoffs.look
+    end
+    sleep 0.25 # 16th note heartbeat
+  end
+  
+  live_loop :snares do
+    sleep 1
+    snare 1 * master.tick * snare_volume
+    sleep 1
+  end
+end
+
+define :baseline do
+  live_loop :bassline do
+    sync :kick
+    with_synth :fm do
+      play bassline_notes.look,
+        amp: master.look * bassline_rhythm.tick * bass_volume,
+        attack: 0.03, divisor: 1, depth: 2.5
+    end
+    sleep 0.25
+  end
+  live_loop :revbassline do
+    sync :snares
+    sleep 7.5
+    with_fx :pan, pan: -0.5 do
+      with_synth :fm do
+        play :d1, amp: bass_volume * master.tick,
+          attack: 0.5, divisor: 0.5, depth: 6
+      end
+    end
+    sleep 0.5
+  end
+end
+
+define :baseline2 do
+  live_loop :bassline do
+    sync :kick
+    with_synth :fm do
+      play bassline_notes.look,
+        amp: master.look * bassline_rhythm.tick * bass_volume,
+        attack: 0.03, divisor: 1, depth: 2.5
+    end
+    sleep 0.125
+  end
+  live_loop :revbassline do
+    sync :snares
+    sleep 7.5
+    with_fx :pan, pan: -0.5 do
+      with_synth :fm do
+        play :d3, amp: bass_volume * master.tick,
+          attack: 0.5, divisor: 0.5, depth: 6
+      end
+    end
+    sleep 0.5
+  end
+end
+
+define :msynth do
+  live_loop :synth do
+    sync :kick
+    ch = invert_chord(dchord, rand_i(3))
+    sleep synth_rhythm.tick/2 # NOTE: can remove /2
+    with_fx :echo, amp: synth_volume * master.look, mix: 0.3,
+    decay: 8, phase: synth_phases.look do
+      with_fx :pan, pan: synth_pans.look do
+        with_fx :reverb, room: 0.7, damp: 0.8 do
+          with_synth_defaults attack: 0.05, release: 0.3 do
+            with_transpose synth_transpositions.look do
+              with_synth :sine do
+                play_chord ch
+              end
+              cutoff = synth_cutoffs.look
+              with_fx :ixi_techno, cutoff_min: cutoff,
+              cutoff_max: cutoff - 30, phase: 1, res: 0.3 do
+                with_synth :dsaw do
+                  play_chord ch, attack: 0.1
+                end
               end
             end
           end
@@ -86,48 +118,112 @@ live_loop :synth do
   end
 end
 
-# TODO: limit this to 8 times?
-##| live_loop :synth2 do
-##|   sync :kick
-##|   sleep synth_rhythm.tick
-##|   with_fx :echo, amp: 0.1, mix: 0.3,
-##|   decay: 8, phase: synth_phases.look do
-##|     with_fx :reverb, room: 0.7, damp: 0.8 do
-##|       with_transpose synth_transpositions.look do
-##|         cutoff = synth_cutoffs.look
-##|         with_fx :ixi_techno, phase: 1, res: 0.3 do
-##|           with_synth :mod_tri do
-##|             play chord(:d3, :minor, num_octaves: 2).choose, attack: 0.1, amp: 0.375
-##|           end
-##|         end
-##|       end
-##|     end
-##|   end
-##| end
+define :msynthOff do
+  live_loop :synth do
+    sleep 2
+  end
+end
 
-##| live_loop :pulputus do
-##|   sync :snares
-##|   sleep 7.5
-##|   sleep synth_rhythm.tick
-##|   with_fx :ixi_techno, mix: 0.25, phase: 2, phase_offset: 0, cutoff_max: 80, cutoff_min: 60 do
-##|     am = 0.4
-##|     s = 0.25
-##|     rel = 1.25
-##|     synth = :blade
-##|     4.times do
-##|       use_synth synth
-##|       play (chord :D3, :minor), cutoff: rrand(50, 70), amp: am, release: rel - 0.75
-##|       sleep s
-##|     end
-##|     2.times do
-##|       use_synth synth
-##|       play (chord :D4, :minor), cutoff: rrand(70, 100), amp: am, release: rel - 0.5
-##|       sleep s
-##|     end
-##|     4.times do
-##|       use_synth synth
-##|       play (chord :D3, :minor), cutoff: rrand(50, 70), amp: am, release: rel - 0.25
-##|       sleep s
-##|     end
-##|   end
-##| end
+define :butterfly do
+  4.times do
+    sync :kick
+    sleep synth_rhythm.tick
+    with_fx :echo, amp: 0.5, mix: 0.3,
+    decay: 8, phase: synth_phases.look do
+      with_fx :reverb, room: 0.7, damp: 0.8 do
+        with_transpose synth_transpositions.look do
+          cutoff = synth_cutoffs.look
+          with_fx :ixi_techno, phase: 1, res: 0.3 do
+            with_synth :mod_tri do
+              play chord(:d3, :minor, num_octaves: 2).choose, attack: 0.1, amp: 0.375
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+define :keyNote do |note|
+  with_fx :echo, amp: 0.5, mix: 0.3,
+  decay: 8, phase: synth_phases.look do
+    with_fx :reverb, room: 0.7, damp: 0.8 do
+      with_transpose synth_transpositions.look do
+        cutoff = synth_cutoffs.look
+        with_fx :ixi_techno, phase: 1, res: 0.3 do
+          with_synth :mod_tri do
+            play note, attack: 0.1, amp: 0.375
+          end
+        end
+      end
+    end
+  end
+  
+end
+
+define :chords do
+  live_loop :pulputus do
+    sync :snares
+    sleep 3.25
+    sleep synth_rhythm.tick
+    with_fx :ixi_techno, mix: 0.25, phase: 2, phase_offset: 0, cutoff_max: 80, cutoff_min: 60 do
+      am = 1.00
+      s = 0.25
+      rel = 1.25
+      synth = :blade
+      4.times do
+        use_synth synth
+        play (chord :D3, :minor), cutoff: rrand(50, 70), amp: am, release: rel - 0.75
+        sleep s
+      end
+      2.times do
+        use_synth synth
+        play (chord :D4, :minor), cutoff: rrand(70, 100), amp: am, release: rel - 0.5
+        sleep s
+      end
+      4.times do
+        use_synth synth
+        play (chord :D3, :minor), cutoff: rrand(50, 70), amp: am, release: rel - 0.25
+        sleep s
+      end
+    end
+  end
+end
+
+define :chords2 do
+  live_loop :pulputus do
+    sync :snares
+    sleep synth_rhythm.tick
+    with_fx :ixi_techno, mix: 0.25, phase: 2, phase_offset: 0, cutoff_max: 80, cutoff_min: 60 do
+      am = 1.00
+      s = 0.25
+      rel = 1.25
+      synth = :blade
+      3.times do
+        use_synth synth
+        play (chord :D4, :minor, num_octaves: 2).choose, cutoff: rrand(50, 70), amp: am, release: rel
+        sleep s
+      end
+    end
+  end
+end
+
+define :main do
+  drums
+  
+  live_loop :midi_piano do
+    use_real_time
+    note, velocity = sync "/midi:mpk_mini_play:1/note_on"
+    baseline if (note == 20)
+    baseline2 if (note == 16)
+    msynth if (note == 21)
+    msynthOff if (note == 17)
+    butterfly if (note == 22)
+    play 40 if (note == 18)
+    chords if (note == 23)
+    chords2 if (note == 19)
+    keyNote note if (note != 20 and note != 16 and note != 21 and note != 17 and note != 22 and note != 18 and note != 23 and note != 19)
+  end
+end
+
+main
