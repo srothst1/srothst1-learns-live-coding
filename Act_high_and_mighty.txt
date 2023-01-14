@@ -7,17 +7,15 @@ use_random_seed 40
 define :drums do
   live_loop :rummut do
     with_fx :reverb do
-      with_fx :bitcrusher do
-        with_fx :panslicer, mix: 0.05 do
-          sample :drum_bass_soft, amp: 0.5
-          sleep 1
-          sample :sn_dolf, amp: 0.25, rate: 0.75, start: 0.13
-          sleep 1
-          sample :drum_bass_soft, amp: 0.5
-          sleep 1
-          sample :sn_dolf, amp: 0.25, rate: 0.75, start: 0.13
-          sleep 1
-        end
+      with_fx :panslicer, mix: 0.05 do
+        sample :drum_bass_soft, amp: 0.5, decay: 0.25
+        sleep 1
+        sample :sn_dolf, amp: 0.25, rate: 0.75, start: 0.13, decay: 0.25
+        sleep 1
+        sample :drum_bass_soft, amp: 0.5, decay: 0.25
+        sleep 1
+        sample :sn_dolf, amp: 0.25, rate: 0.75, start: 0.13, decay: 0.25
+        sleep 1
       end
     end
   end
@@ -44,7 +42,14 @@ define :click do
     live_loop :hihat do
       sync :rummut
       sample :loop_compus, beat_stretch: 8, amp: 0.25
-      sleep 8
+      16.times do
+        with_fx :ixi_techno do
+          use_synth :dsaw
+          play chord(:C3, :minor7).choose, cutoff: rrand(60, 110), amp: 0.5
+          sleep 0.25
+        end
+      end
+      sleep 2
     end
   end
   if (x == 3)
@@ -96,14 +101,20 @@ end
 
 ##| live_loop :syna1 do
 ##|   sync :rummut
-##|   use_synth :prophet
-##|   use_synth_defaults amp: 0.25, attack: 2, release: 0.25
-##|   with_fx :ixi_techno, phase: 2, mix: 0.5 do
-##|     play [:C4, :Eb4, :G4, :Bb4].ring.tick, pan: rrand(-0.95, 0.95), amp: 0.25
+##|   live_loop :tt do
+##|     use_synth :prophet
+##|     use_synth_defaults amp: 0.25, attack: 2, release: 0.25
+##|     ##| with_fx :ixi_techno, phase: 2, mix: 0.5 do
+##|     play [:C4, :C3, :C5, :C4].ring.tick, pan: rrand(-0.95, 0.95), amp: 0.25
 ##|     sleep 1
+##|     ##| end
 ##|   end
 ##| end
-
+##| live_loop :basso do
+##|   use_synth :dsaw
+##|   play chord(:C3, :major).choose, cutoff: rrand(60, 110), amp: 0.5
+##|   sleep 0.5
+##| end
 
 define :main do
   live_loop :midi_piano do
