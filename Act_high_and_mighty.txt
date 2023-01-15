@@ -34,58 +34,47 @@ end
 
 define :click do
   live_loop :hihat do
-    sync :rummut
-    sample :loop_compus, beat_stretch: 16, amp: 0.25
-    sleep 2
+    with_fx :reverb do
+      sync :rummut
+      sample :loop_compus, beat_stretch: 16, amp: 0.15
+      sleep 2
+    end
   end
 end
 
 define :samplePlay do |key|
   if (key == 0)
-    ##| live_loop :luuppibiitti do
-    ##|   sync :rummut
-    ##|   sample :loop_compus, beat_stretch: 8, amp: 0.25
-    ##|   sleep 8
-    ##| end
+    live_loop :dontWanna do
+      sync :rummut
+      sleep 10
+      with_fx :echo, mix: 0.7 do
+        sample "/Users/srothst1/Desktop/fall_down_short_intro.wav", rate: 2*0.82, amp: 0.075, start: 0.2
+      end
+      sleep 13
+    end
   else
     with_fx :reverb do
       sync :rummut
-      sample "/Users/srothst1/Desktop/fall_down_short.wav", rate: 0.82, amp: 0.5
+      sample "/Users/srothst1/Desktop/fall_down_short.wav", rate: 0.82, amp: 0.35
     end
   end
 end
 
-define :keyNote do |note|
-  use_synth :pretty_bell
-  play note
-end
-
-
-live_loop :dontWanna do
-  sync :rummut
-  sleep 10
-  with_fx :echo, mix: 0.7 do
-    sample "/Users/srothst1/Desktop/fall_down_short_intro.wav", rate: 2*0.82, amp: 0.10, start: 0.2
+define :keyNoteOsc do |note|
+  sync :hihat
+  ticks = [-0.25,-0.20,-0.15,-0.1,-0.05,0,0.05,0.1,0.15,0.2,0.25]
+  
+  live_loop :syna1 do
+    print note
+    print ticks.tick
+    use_synth :blade
+    use_synth_defaults attack: 0.5
+    with_fx :ixi_techno, phase: rrand(1.45,1.55), mix: 0.7 do
+      play [note + 6, note - 6].ring.tick, pan: 3*ticks.tick, amp: 0.2, release: 0.55, cutoff: rrand(70, 80)
+      sleep 0.25
+    end
   end
-  sleep 13
 end
-
-##| live_loop :syna1 do
-##|   sync :rummut
-##|   live_loop :tt do
-##|     use_synth :prophet
-##|     use_synth_defaults amp: 0.25, attack: 2, release: 0.25
-##|     ##| with_fx :ixi_techno, phase: 2, mix: 0.5 do
-##|     play [:C4, :C3, :C5, :C4].ring.tick, pan: rrand(-0.95, 0.95), amp: 0.25
-##|     sleep 1
-##|     ##| end
-##|   end
-##| end
-##| live_loop :basso do
-##|   use_synth :dsaw
-##|   play chord(:C3, :major).choose, cutoff: rrand(60, 110), amp: 0.5
-##|   sleep 0.5
-##| end
 
 define :main do
   live_loop :midi_piano do
@@ -99,7 +88,7 @@ define :main do
     samplePlay 1 if (note == 18)
     ##| chords if (note == 23)
     ##| chords2 if (note == 19)
-    keyNote note if (note != 20 and note != 16 and note != 21 and note != 17 and note != 22 and note != 18 and note != 23 and note != 19)
+    keyNoteOsc note if (note != 20 and note != 16 and note != 21 and note != 17 and note != 22 and note != 18 and note != 23 and note != 19)
   end
   ##| samplePlay
 end
