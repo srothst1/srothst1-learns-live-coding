@@ -73,19 +73,35 @@ define :keyNoteOsc do |note|
     use_synth :blade
     use_synth_defaults attack: 0.5
     with_fx :ixi_techno, phase: rrand(1.45,1.55), mix: 0.7 do
-      play [note + 6, note - 6].ring.tick, pan: 3*ticks.tick, amp: 0.2, release: 0.55, cutoff: rrand(70, 80)
+      play [note + 6, note - 6].ring.tick, pan: 3*ticks.tick, amp: 0.15, release: 0.55, cutoff: rrand(70, 80)
+      sleep 0.25
+    end
+  end
+end
+
+define :mmmm do
+  sync :rummut
+  notessss = [48,48,52,56,62]
+  
+  live_loop :syna4 do
+    print notessss.tick
+    use_synth :blade
+    use_synth_defaults attack: 0.5
+    with_fx :ixi_techno, phase: rrand(1.45,1.55), mix: 0.7 do
+      play notessss.tick, amp: 0.5, release: 0.55, cutoff: rrand(70, 80)
       sleep 0.25
     end
   end
 end
 
 define :main do
+  
   live_loop :midi_piano do
     use_real_time
     note, velocity = sync "/midi:mpk_mini_play:1/note_on"
     drums if (note == 20)
     click if (note == 16)
-    ##| msynth if (note == 21)
+    mmmm if (note == 21)
     ##| msynthOff if (note == 17)
     samplePlay 0 if (note == 22)
     samplePlay 1 if (note == 18)
