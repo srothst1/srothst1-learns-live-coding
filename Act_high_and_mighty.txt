@@ -1,7 +1,7 @@
 # Act High and Mighty
 # Templates: https://sonic-pi.mehackit.org/exercises/no/11-templates/02-band-example.html
 
-use_bpm 100
+use_bpm 120 #100
 use_random_seed 40
 
 define :drums do
@@ -46,22 +46,25 @@ define :samplePlay do |key|
   if (key == 0)
     live_loop :dontWanna do
       sync :rummut
-      sleep 10
+      sleep 3
       with_fx :echo, mix: 0.7 do
-        sample "/Users/srothst1/Desktop/fall_down_short_intro.wav", rate: 2*0.82, amp: 0.075, start: 0.2
+        sample "/Users/srothst1/Desktop/fall_down_short_intro.wav", rate: 0.984, amp: 0.075, start: 0.2
       end
-      sleep 13
     end
   else
+    live_loop :dontWanna do
+      sync :rummut
+      sleep 3
+    end
     with_fx :reverb do
       sync :rummut
-      sample "/Users/srothst1/Desktop/fall_down_short.wav", rate: 0.82, amp: 0.35
+      sample "/Users/srothst1/Desktop/fall_down_short.wav", rate: 0.984, amp: 0.35
     end
   end
 end
 
 define :keyNoteOsc do |note|
-  sync :hihat
+  sync :rummut #:hihat
   ticks = [-0.25,-0.20,-0.15,-0.1,-0.05,0,0.05,0.1,0.15,0.2,0.25]
   
   live_loop :syna1 do
@@ -90,7 +93,6 @@ define :main do
     ##| chords2 if (note == 19)
     keyNoteOsc note if (note != 20 and note != 16 and note != 21 and note != 17 and note != 22 and note != 18 and note != 23 and note != 19)
   end
-  ##| samplePlay
 end
 
 main
