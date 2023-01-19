@@ -34,6 +34,11 @@ end
 
 define :click do
   live_loop :hihat do
+    sync :rummut
+    sleep 3
+    with_fx :echo, mix: 0.7 do
+      sample "/Users/srothst1/Desktop/fall_down_short_intro.wav", rate: 0.984, amp: 0.075, start: 0.2
+    end
     with_fx :reverb do
       sync :rummut
       sample :loop_compus, beat_stretch: 16, amp: 0.15
@@ -44,18 +49,16 @@ end
 
 define :samplePlay do |key|
   if (key == 0)
-    live_loop :dontWanna do
-      sync :rummut
-      sleep 3
-      with_fx :echo, mix: 0.7 do
-        sample "/Users/srothst1/Desktop/fall_down_short_intro.wav", rate: 0.984, amp: 0.075, start: 0.2
+    live_loop :armstrong do
+      with_fx :ixi_techno, mix: 0.05 do
+        with_fx :echo, mix: 0.5 do
+          sync :rummut
+          sample "/Users/srothst1/Desktop/duke_pt_2_3.wav", rate:  [0.60,0.60,0.617,0.60].tick, amp: 0.25, release: 1.25, pan: rrand(-0.25,0.25) #, pitch: 1.1
+        end
       end
+      sleep 4
     end
   else
-    live_loop :dontWanna do
-      sync :rummut
-      sleep 3
-    end
     with_fx :reverb do
       sync :rummut
       sample "/Users/srothst1/Desktop/fall_down_short.wav", rate: 0.984, amp: 0.35
@@ -64,32 +67,16 @@ define :samplePlay do |key|
 end
 
 define :keyNoteOsc do |note|
-  sync :rummut #:hihat
+  sync :rummut
   ticks = [-0.25,-0.20,-0.15,-0.1,-0.05,0,0.05,0.1,0.15,0.2,0.25]
-  
   live_loop :syna1 do
     print note
     print ticks.tick
     use_synth :blade
     use_synth_defaults attack: 0.5
-    with_fx :ixi_techno, phase: rrand(1.45,1.55), mix: 0.7 do
-      play [note + 6, note - 6].ring.tick, pan: 3*ticks.tick, amp: 0.15, release: 0.55, cutoff: rrand(70, 80)
-      sleep 0.25
-    end
-  end
-end
-
-define :mmmm do
-  sync :rummut
-  notessss = [48,48,52,56,62]
-  
-  live_loop :syna4 do
-    print notessss.tick
-    use_synth :blade
-    use_synth_defaults attack: 0.5
-    with_fx :ixi_techno, phase: rrand(1.45,1.55), mix: 0.7 do
-      play notessss.tick, amp: 0.5, release: 0.55, cutoff: rrand(70, 80)
-      sleep 0.25
+    with_fx :echo, phase: rrand(1.5, 1.6), mix: 0.7 do
+      play [note - 6, note + 6], pan: 3*ticks.tick, amp: 0.25, release: 0.15, cutoff: rrand(70, 80)
+      sleep 0.5
     end
   end
 end
@@ -101,8 +88,8 @@ define :main do
     note, velocity = sync "/midi:mpk_mini_play:1/note_on"
     drums if (note == 20)
     click if (note == 16)
-    mmmm if (note == 21)
-    ##| msynthOff if (note == 17)
+    ##| if (note == 21)
+    ##| if (note == 17)
     samplePlay 0 if (note == 22)
     samplePlay 1 if (note == 18)
     ##| chords if (note == 23)
