@@ -33,6 +33,8 @@ define :drums do
 end
 
 define :click do
+  b_stretch = [16,32,24].choose
+  print b_stretch
   live_loop :hihat do
     sync :rummut
     sleep 3
@@ -41,27 +43,39 @@ define :click do
     end
     with_fx :reverb do
       sync :rummut
-      sample :loop_compus, beat_stretch: 16, amp: 0.15
+      sample :loop_compus, amp: 0.275, beat_stretch: b_stretch #16 works | 32 works| 24 works
       sleep 2
     end
   end
 end
 
 define :samplePlay do |key|
+  ticks = [-0.25,-0.20,-0.15,-0.1,-0.05,0,0.05,0.1,0.15,0.2,0.25]
   if (key == 0)
     live_loop :armstrong do
-      with_fx :ixi_techno, mix: 0.05 do
-        with_fx :echo, mix: 0.5 do
-          sync :rummut
-          sample "/Users/srothst1/Desktop/duke_pt_2_3.wav", rate:  [0.60,0.60,0.617,0.60].tick, amp: 0.25, release: 1.25, pan: rrand(-0.25,0.25) #, pitch: 1.1
+      sync :rummut
+      pan = 3*ticks.tick
+      2.times do
+        with_fx :bitcrusher, mix: 0.3 do
+          sample "/Users/srothst1/Desktop/duke_pt_2_3.wav", rate:  1.2, amp: 0.425, release: 0.25, pan: pan
         end
+        sleep 0.5
+        with_fx :bitcrusher, mix: 0.3 do
+          with_fx :echo do
+            sample "/Users/srothst1/Desktop/duke_pt_2_3.wav", rate:  1.2, amp: 0.425, release: 2.25, pan: pan
+          end
+        end
+        sleep 1.5
       end
-      sleep 4
     end
   else
-    with_fx :reverb do
+    live_loop :armstrong do
       sync :rummut
-      sample "/Users/srothst1/Desktop/fall_down_short.wav", rate: 0.984, amp: 0.35
+      sleep 1
+    end
+    with_fx :echo, mix: 0.7 do
+      sync :rummut
+      sample "/Users/srothst1/Desktop/fall_down_short.wav", amp: 0.30, rate: 0.984
     end
   end
 end
@@ -72,10 +86,16 @@ define :keyNoteOsc do |note|
   live_loop :syna1 do
     print note
     print ticks.tick
-    use_synth :blade
+    use_synth :saw
     use_synth_defaults attack: 0.5
     with_fx :echo, phase: rrand(1.5, 1.6), mix: 0.7 do
-      play [note - 6, note + 6], pan: 3*ticks.tick, amp: 0.25, release: 0.15, cutoff: rrand(70, 80)
+      play note, pan: 3*ticks.tick, amp: 0.15, release: 0.15, cutoff: rrand(70, 80)
+      sleep 0.5
+      play note + 6, pan: 3*ticks.tick, amp: 0.15, release: 0.15, cutoff: rrand(70, 80)
+      sleep 0.5
+      play note + 4, pan: 3*ticks.tick, amp: 0.15, release: 0.15, cutoff: rrand(70, 80)
+      sleep 0.5
+      play note, pan: 3*ticks.tick, amp: 0.15, release: 0.15, cutoff: rrand(70, 80)
       sleep 0.5
     end
   end
