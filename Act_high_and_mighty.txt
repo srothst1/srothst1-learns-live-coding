@@ -1,7 +1,7 @@
 # Act High and Mighty
 # Templates: https://sonic-pi.mehackit.org/exercises/no/11-templates/02-band-example.html
 
-use_bpm 120 #100
+use_bpm 120
 use_random_seed 40
 
 define :drums do
