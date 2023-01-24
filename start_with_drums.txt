@@ -33,35 +33,33 @@ define :clap_loop do |on|
   end
 end
 
+define :charm do |on|
+  sync :drums
+  with_fx :reverb, mix: 0.7 do
+    if (on == 0)
+      live_loop :arp do
+        sleep 1
+      end
+    else
+      live_loop :arp do
+        with_fx :echo, phase: 1, mix: (line 0.3, 1, steps: 128).mirror.tick do
+          ##| stop
+          a = 0.6
+          r = 0.25
+          c = 130
+          p = (line -0.7, 0.7, steps: 64).mirror.tick
+          at = 0.01
+          use_synth :beep
+          tick
+          notes = (scale :g4, :major_pentatonic).shuffle
+          play notes.look, amp: a, release: r, cutoff: c, pan: p, attack: at
+          sleep 0.5
+        end
+      end
+    end
+  end
+end
+
 drum_loop(1)
 clap_loop(1)
-
-##| live_loop :bassline do
-##|   notes = (scale :g4, :major_pentatonic).shuffle
-##|   4.times do
-##|     with_fx :flanger, phase: 4.0 do
-##|       use_synth :mod_dsaw
-##|       play notes.tick, amp: 0.8, attack_level: 0.6, sustain_level: 0.5, sustain: 0.2, release: 1.1
-##|       sleep 1.0
-##|     end
-##|   end
-##|   sleep 8
-##| end
-
-##| with_fx :reverb, mix: 0.7 do
-##|   live_loop :arp do
-##|     with_fx :echo, phase: 1, mix: (line 0.1, 1, steps: 128).mirror.tick do
-##|       ##| stop
-##|       a = 0.6
-##|       r = 0.25
-##|       c = 130
-##|       p = (line -0.5, 0.5, steps: 64).mirror.tick
-##|       at = 0.01
-##|       use_synth :beep
-##|       tick
-##|       notes = (scale :g4, :major_pentatonic).shuffle
-##|       play notes.look, amp: a, release: r, cutoff: c, pan: p, attack: at
-##|       sleep 0.5
-##|     end
-##|   end
-##| end
+charm(1)
