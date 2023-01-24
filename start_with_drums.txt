@@ -1,49 +1,56 @@
+# srothst1 | January 2023
+
 use_bpm 120
 mix_rate = [0.4,0.4,0.4,0.6]
 
-define :drum_loop do |sl_t|
-  live_loop :drums do
-    pan_rate = [-0.25,-0.25,0.25,0.25]
-    4.times do
-      with_fx :echo, mix: mix_rate.tick do
-        sample :bd_tek, rate: 1.2, pan: 2*pan_rate.tick
+define :drum_loop do |sl_t| # 2 -> 1
+  if (sl_t == 0)
+    live_loop :drums do
+      sleep 1
+    end
+  else
+    live_loop :drums do
+      pan_rate = [-0.25,-0.25,0.25,0.25]
+      4.times do
+        with_fx :echo, mix: mix_rate.tick do
+          sample :bd_tek, rate: 1.2, pan: 2*pan_rate.tick
+        end
+        sleep sl_t
       end
-      sleep sl_t # 2 -> 1
     end
   end
 end
 
-define :clap_loop do |on|
+define :clap_loop do |on| # 1 -> 2
   if (on == 0)
     live_loop :swift do
       sleep 1
     end
   else
+    sync :drums
     live_loop :swift do
-      sync :drums
       with_fx :bitcrusher, mix: mix_rate.tick do
-        sample :elec_fuzz_tom, rate: -2.4, start: 0.2
+        sample :elec_fuzz_tom, rate: -2.4, start: 0.2, amp: 0.7
       end
-      sleep 2
+      sleep on
       with_fx :echo, phase: 0.125, mix: 0.6 do
         sample :sn_dolf, rate: 1.2, start: 0.1, amp: 0.25
       end
-      sleep 2
+      sleep on
     end
   end
 end
 
-define :charm do |on|
-  sync :drums
+define :charm do |on| # 0.5 -> 0.25
   with_fx :reverb, mix: 0.7 do
     if (on == 0)
       live_loop :arp do
         sleep 1
       end
     else
+      sync :drums
       live_loop :arp do
         with_fx :echo, phase: 1, mix: (line 0.3, 1, steps: 128).mirror.tick do
-          ##| stop
           a = 0.6
           r = 0.25
           c = 130
@@ -53,13 +60,65 @@ define :charm do |on|
           tick
           notes = (scale :g4, :major_pentatonic).shuffle
           play notes.look, amp: a, release: r, cutoff: c, pan: p, attack: at
-          sleep 0.5
+          sleep on
         end
       end
     end
   end
 end
 
-drum_loop(1)
+define :deep_charm do |on, style| # 2
+  sync :drums
+  if (on == 0)
+    live_loop :deep_arp do
+      sleep 1
+    end
+  else
+    live_loop :deep_arp do
+      ##| notes = [43,43,45,47]
+      with_fx :echo, phase: on - (line on/2, on, steps: 4).mirror.tick do
+        use_synth :fm
+        a = 1.1
+        if (style == 0)
+          notes = [43,43,45,47]
+          play notes.tick, amp: a
+        else
+          notes = [47,55,50,52]
+          play notes.look, amp: a - 0.2
+        end
+        sleep on
+      end
+    end
+  end
+end
+
+define :samplePlay do |on|
+  sync :drums
+  if (on == 0)
+    live_loop :armstrong do
+      sleep 1
+    end
+  else
+    2.times do
+      2.times do
+        with_fx :bitcrusher, mix: 0.3 do
+          sample "/Users/srothst1/Desktop/Music_Samples/duke_pt_2_3.wav", rate:  1.20, amp: 0.425, release: 0.25
+        end
+        sleep 0.5
+        with_fx :bitcrusher, mix: 0.3 do
+          with_fx :echo do
+            sample "/Users/srothst1/Desktop/Music_Samples/duke_pt_2_3.wav", rate:  1.20, amp: 0.425, release: 2.25
+          end
+        end
+        sleep 1.5
+      end
+    end
+  end
+end
+
+#scale :g2, :major_pentatonic = [43, 45, 47, 50, 52, 55]
+drum_loop(2)
 clap_loop(1)
-charm(1)
+charm(.25)
+deep_charm(1, 0)
+samplePlay(1)
