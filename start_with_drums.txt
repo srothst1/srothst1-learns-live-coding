@@ -5,7 +5,22 @@ use_bpm 120
 mix_rate = [0.4,0.4,0.4,0.6]
 
 live_loop :master_tick do
-  sleep 2
+  sleep 1
+end
+
+define :deep_bass_loop do |sl_t|
+  if (sl_t == 0)
+    live_loop :loop_test do
+      sleep 2
+    end
+  else
+    live_loop :loop_test do
+      with_fx :echo, phase: 0.5 do
+        sample :bass_trance_c, rate: 0.95, amp: 0.6
+        sleep 16
+      end
+    end
+  end
 end
 
 define :drum_loop do |sl_t| # 2 -> 1
@@ -17,10 +32,17 @@ define :drum_loop do |sl_t| # 2 -> 1
     live_loop :drums do
       pan_rate = [-0.25,-0.25,0.25,0.25]
       4.times do
-        with_fx :echo, mix: mix_rate.tick do
-          sample :bd_tek, rate: 1.2, pan: 2*pan_rate.tick
+        if (sl_t < 3)
+          with_fx :echo, mix: mix_rate.tick do
+            sample :bd_tek, rate: 1.2, pan: 2*pan_rate.tick
+          end
+          sleep sl_t
+        else
+          with_fx :echo, mix: mix_rate.tick do
+            sample :bd_tek, rate: 0.8
+          end
+          sleep 1
         end
-        sleep sl_t
       end
     end
   end
@@ -38,10 +60,12 @@ define :clap_loop do |on| # 1 -> 2
         sample :elec_fuzz_tom, rate: -2.4, start: 0.2, amp: 0.7
       end
       sleep on
-      with_fx :echo, phase: 0.125, mix: 0.6 do
-        sample :sn_dolf, rate: 1.2, start: 0.1, amp: 0.25
+      if (on < 3)
+        with_fx :echo, phase: 0.125, mix: 0.6 do
+          sample :sn_dolf, rate: 1.2, start: 0.1, amp: 0.25
+        end
+        sleep on
       end
-      sleep on
     end
   end
 end
@@ -53,7 +77,7 @@ define :charm do |on| # 0.5 -> 0.25
         sleep 1
       end
     else
-      sync :drums
+      sync :master_tick
       live_loop :arp do
         with_fx :echo, phase: 1, mix: (line 0.3, 1, steps: 128).mirror.tick do
           a = 0.6
@@ -73,7 +97,7 @@ define :charm do |on| # 0.5 -> 0.25
 end
 
 define :deep_charm do |on, style| # 2
-  sync :drums
+  sync :master_tick
   if (on == 0)
     live_loop :deep_arp do
       sleep 1
@@ -100,17 +124,11 @@ define :deep_charm do |on, style| # 2
 end
 
 define :samplePlay do |on| #4
-  sync :drums
+  sync :master_tick
   if (on == 0)
     live_loop :armstrong do
       sleep 1
     end
-    ##| with_fx :reverb, mix: 0.3 do
-    ##|   live_loop :armstrong do
-    ##|     sample "/Users/srothst1/Desktop/be_your_mirror_vocals_3.wav", amp: 6.0, rate: 1*1.13 #, amp: 0.425, release: 0.25
-    ##|     sleep 8
-    ##|   end
-    ##| end
   else
     with_fx :reverb, mix: 0.3 do
       live_loop :armstrong do
@@ -124,8 +142,9 @@ end
 #scale :g2, :major_pentatonic = [43, 45, 47, 50, 52, 55]
 # D [50, 52, 54, 55, 57, 59, 61, 62])
 ##| :D :major [38, 40, 42, 43, 45, 47, 49, 50])
-drum_loop(1)
-clap_loop(1)
+drum_loop(0) #4 is deeper
+clap_loop(0)
 charm(0)
-deep_charm(1, 1)
-samplePlay(2)
+deep_charm(0, 0)
+samplePlay(0)
+deep_bass_loop(0)
