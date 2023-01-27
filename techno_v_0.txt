@@ -1,0 +1,44 @@
+# Learning techno basics with srothst1
+
+# From techno wiki (https://en.wikipedia.org/wiki/Techno):
+# kicks (bass drum) each quarter note pulse
+# clap or snare at the second and fourth pulse of the bar
+# high hat every second eigth note
+# between 120 -> 150 bpm
+
+##| ________
+##| K_K_K_K_
+##| __S___S_
+##| _H_H_H_H
+
+use_bpm 120
+
+live_loop :kicks do
+  4.times do
+    sample :bd_klub
+    sleep 1
+  end
+end
+
+live_loop :snare do
+  sleep 1
+  sample :bd_haus
+  sleep 2
+  sample :bd_haus
+  sleep 1
+end
+
+live_loop :hihat do
+  sleep 0.5
+  live_loop :pp do
+    sample :bd_tek
+    sleep 1
+  end
+end
+
+##| with_fx :echo, mix: 0.4, phase: 0.4 do
+##|   live_loop :armstrong do
+##|     sample "/Users/srothst1/Desktop/silver_soul_crop.wav", amp: 0.5, rate: 0.5*1.73913043478, start: 0.0, finish: 0.3
+##|     sleep 4
+##|   end
+##| end

@@ -14,11 +14,14 @@ define :deep_bass_loop do |sl_t|
       sleep 2
     end
   else
+    sync :master_tick
     live_loop :loop_test do
       with_fx :echo, phase: 0.5 do
-        sample :bass_trance_c, rate: 0.95, amp: 0.6
-        sleep 16
+        with_fx :echo, phase: 1.0 do
+          sample :bass_trance_c, rate: 0.95, amp: 0.5
+        end
       end
+      sleep sl_t
     end
   end
 end
@@ -87,7 +90,7 @@ define :charm do |on| # 0.5 -> 0.25
           at = 0.01
           use_synth :beep
           tick
-          notes = (scale :g4, :major_pentatonic).shuffle #OG
+          notes = (scale :g3, :major_pentatonic).shuffle #OG
           play notes.look, amp: a, release: r, cutoff: c, pan: p, attack: at
           sleep on
         end
@@ -132,7 +135,7 @@ define :samplePlay do |on| #4
   else
     with_fx :reverb, mix: 0.3 do
       live_loop :armstrong do
-        sample "/Users/srothst1/Desktop/be_your_mirror_guitar_4.wav", amp: 6.0, rate: 2*1.13, start: 0.0 #, amp: 0.425, release: 0.25
+        sample "/Users/srothst1/Desktop/be_your_mirror_guitar_4.wav", amp: 6.0, rate: 2*1.13, start: 0.0
         sleep on
       end
     end
@@ -142,9 +145,9 @@ end
 #scale :g2, :major_pentatonic = [43, 45, 47, 50, 52, 55]
 # D [50, 52, 54, 55, 57, 59, 61, 62])
 ##| :D :major [38, 40, 42, 43, 45, 47, 49, 50])
-drum_loop(0) #4 is deeper
-clap_loop(0)
-charm(0)
-deep_charm(0, 0)
-samplePlay(0)
-deep_bass_loop(0)
+drum_loop(4) #4 is deeper
+clap_loop(1)
+charm(2)
+deep_charm(1, 1)
+samplePlay(8)
+deep_bass_loop(8) #8 -> 4 -> 2
