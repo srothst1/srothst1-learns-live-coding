@@ -36,9 +36,34 @@ live_loop :hihat do
   end
 end
 
+with_fx :echo, mix: 0.4, phase: 0.4 do
+  live_loop :armstrong do
+    3.times do
+      sample "/Users/srothst1/Desktop/coal_daughter_in_0.wav", amp: 3.0, rate: 1.0*0.86956521739, start: 0.2, finish: 0.33, pitch: 0.9
+      sleep 1
+      sample "/Users/srothst1/Desktop/coal_daughter_in_0.wav", amp: 3.0, rate: 1.0*0.86956521739, start: 0.2, finish: 0.33, pitch: 1.0
+      sleep 3
+    end
+    1.times do
+      sample "/Users/srothst1/Desktop/coal_daughter_in_0.wav", amp: 3.0, rate: 1.1*0.86956521739, start: 0.2, finish: 0.33, pitch: 0.9
+      sleep 1
+      sample "/Users/srothst1/Desktop/coal_daughter_in_0.wav", amp: 3.0, rate: 1.1*0.86956521739, start: 0.2, finish: 0.33, pitch: 1.0
+      sleep 3
+    end
+  end
+end
+
 ##| with_fx :echo, mix: 0.4, phase: 0.4 do
-##|   live_loop :armstrong do
-##|     sample "/Users/srothst1/Desktop/silver_soul_crop.wav", amp: 0.5, rate: 0.5*1.73913043478, start: 0.0, finish: 0.3
-##|     sleep 4
+##|   live_loop :singplz do
+##|     sample "/Users/srothst1/Desktop/miner_daughter_vocals.wav", amp: 3.0, rate: 0.86956521739, start: 0.32, finish: 0.44
+##|     sleep 16
+##|     2.times do
+##|       sample "/Users/srothst1/Desktop/miner_daughter_vocals.wav", amp: 3.0, rate: 0.86956521739, start: 0.51, finish: 0.53
+##|       sleep 2
+##|     end
+##|     with_fx :ixi_techno, mix: 0.5, phase: 2, cutoff_max: 80, cutoff_min: 40 do
+##|       sample "/Users/srothst1/Desktop/miner_daughter_vocals.wav", amp: 3.0, rate: 0.86956521739, start: 0.51, finish: 0.60 #finish: 0.53#
+##|     end
+##|     sleep 14
 ##|   end
 ##| end
