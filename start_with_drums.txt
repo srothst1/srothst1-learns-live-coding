@@ -18,7 +18,7 @@ define :deep_bass_loop do |sl_t|
     live_loop :loop_test do
       with_fx :echo, phase: 0.5 do
         with_fx :echo, phase: 1.0 do
-          sample :bass_trance_c, rate: 0.95, amp: 0.5
+          sample :bass_trance_c, rate: 0.95, amp: 0.5, finish: 0.5
         end
       end
       sleep sl_t
@@ -126,17 +126,27 @@ define :deep_charm do |on, style| # 2
   end
 end
 
-define :samplePlay do |on| #4
-  sync :master_tick
+define :samplePlay do |on, sleep| #4
   if (on == 0)
     live_loop :armstrong do
       sleep 1
     end
   else
-    with_fx :reverb, mix: 0.3 do
-      live_loop :armstrong do
-        sample "/Users/srothst1/Desktop/be_your_mirror_guitar_4.wav", amp: 6.0, rate: 2*1.13, start: 0.0
-        sleep on
+    if (on == 1)
+      sync :master_tick
+      with_fx :reverb, mix: 0.3 do
+        live_loop :armstrong do
+          sample "/Users/srothst1/Desktop/be_your_mirror_guitar_4.wav", amp: 6.0, rate: 2*1.13, start: 0.0
+          sleep sleep
+        end
+      end
+    else
+      sync :drums
+      with_fx :echo, mix: 0.4, phase: 0.4 do
+        live_loop :armstrong do
+          sample "/Users/srothst1/Desktop/silver_soul_crop.wav", amp: 1.25, rate: 0.5*1.73913043478, start: 0.0, finish: 0.3
+          sleep sleep
+        end
       end
     end
   end
@@ -145,9 +155,9 @@ end
 #scale :g2, :major_pentatonic = [43, 45, 47, 50, 52, 55]
 # D [50, 52, 54, 55, 57, 59, 61, 62])
 ##| :D :major [38, 40, 42, 43, 45, 47, 49, 50])
-drum_loop(4) #4 is deeper
-clap_loop(1)
-charm(2)
-deep_charm(1, 1)
-samplePlay(8)
-deep_bass_loop(8) #8 -> 4 -> 2
+drum_loop(2) #4 is deeper
+clap_loop(2)
+charm(0.5)
+deep_charm(1, 0)
+deep_bass_loop(4) #8 -> 4 -> 2
+samplePlay(1,32)
