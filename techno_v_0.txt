@@ -129,7 +129,7 @@ define :bassline do |on, invert, oct_down, sl|
       sleep 0.5
       am = 0.8
       live_loop :dpp do
-        use_synth :dsaw
+        use_synth :fm #:beep #:dsaw #:dull_bell
         with_fx :echo, phase: sl * 0.5 do
           with_fx :ixi_techno, mix: 0.4 do
             play notes.choose, amp: am, pitch: oct_down * -12
@@ -139,35 +139,6 @@ define :bassline do |on, invert, oct_down, sl|
             play notes.choose, amp: am, pitch: oct_down * -12
           end
           sleep sl
-        end
-      end
-    end
-  end
-end
-
-define :sparklesample do |on|
-  if (on == 0)
-    live_loop :tp do
-      sleep 1
-    end
-  else
-    sync :kicks
-    with_fx :echo, mix: 0.4, phase: 0.4 do
-      pitch_0 = 0.88
-      pitch_1 = 0.98
-      rrt = 1.0
-      live_loop :tp do
-        3.times do
-          sample "/Users/srothst1/Desktop/coal_daughter_in_0.wav", amp: 3.0, rate: rrt*0.86956521739, start: 0.2, finish: 0.33, pitch: pitch_0
-          sleep 1
-          sample "/Users/srothst1/Desktop/coal_daughter_in_0.wav", amp: 3.0, rate: rrt*0.86956521739, start: 0.2, finish: 0.33, pitch: pitch_1
-          sleep 3
-        end
-        1.times do
-          sample "/Users/srothst1/Desktop/coal_daughter_in_0.wav", amp: 3.0, rate: rrt*0.86956521739, start: 0.2, finish: 0.33, pitch: pitch_0
-          sleep 1
-          sample "/Users/srothst1/Desktop/coal_daughter_in_0.wav", amp: 3.0, rate: rrt*0.86956521739, start: 0.2, finish: 0.33, pitch: pitch_1
-          sleep 3
         end
       end
     end
@@ -186,14 +157,10 @@ define :vocalSample do |note|
         with_fx :echo, mix: 0.4, phase: 0.4 do
           sample "/Users/srothst1/Desktop/miner_daughter_vocals.wav", amp: 3.0, rate: 0.86956521739, start: 0.32, finish: 0.44
           sleep 16
-          2.times do
-            sample "/Users/srothst1/Desktop/miner_daughter_vocals.wav", amp: 3.0, rate: 0.86956521739, start: 0.51, finish: 0.53
-            sleep 2
-          end
           with_fx :ixi_techno, mix: 0.5, phase: 2, cutoff_max: 80, cutoff_min: 40 do
             sample "/Users/srothst1/Desktop/miner_daughter_vocals.wav", amp: 3.0, rate: 0.86956521739, start: 0.51, finish: 0.60 #finish: 0.53#
           end
-          sleep 14
+          sleep 16
         end
       end
     else
@@ -215,9 +182,41 @@ define :vocalSample do |note|
 end
 
 
-kick(1,1)
+define :charm do |on| # 0.5 -> 0.25
+  with_fx :reverb, mix: 0.7 do
+    if (on == 0)
+      live_loop :arp do
+        sleep 1
+      end
+    else
+      sync :master_tick
+      live_loop :arp do
+        with_fx :echo, phase: 1, mix: (line 0.3, 1, steps: 128).mirror.tick do
+          a = 0.4
+          r = 0.25
+          c = 130
+          p = (line -0.7, 0.7, steps: 64).mirror.tick
+          at = 0.01
+          use_synth :fm
+          tick
+          notes = chord(:D, :major7, invert: 1).shuffle #OG
+          play notes.look, amp: a, release: r, cutoff: c, pan: p, attack: at
+          sleep on
+        end
+      end
+    end
+  end
+end
+
+
+kick(1,1)#1
 snare(1,0)
 ticky(1)
 bassline(1,1,2,2) # [on (0,1), invert(1 or 2), oct_down (2,3), sl (sleep 2 -> 1)]
-sparklesample(0) #sounds good with 2 sleep on bassline
-vocalSample(0)
+charm(0.25)
+vocalSample(2)
+
+
+
+###
+
