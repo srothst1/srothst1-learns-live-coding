@@ -1,0 +1,204 @@
+# More techno basics with srothst1
+
+##| https://www.youtube.com/watch?v=CdoXBZnBHK4
+##| 113 bpm
+##| g major key
+
+##| ________
+##| K_K_K_K_
+##| __S___S_
+##| _H_H_H_H
+
+use_bpm 126
+
+define :startSong do
+  sample "/Users/srothst1/Desktop/book_em_vocals_0.wav", amp: 1.05, rate: 1.157, start: 0.0, finish: 1.00
+  sleep 4
+end
+
+live_loop :master_tick do
+  sleep 4
+end
+
+live_loop :baby_tick do
+  sleep 1
+end
+
+define :kick do |on, pitch|
+  if (on == 0)
+    live_loop :kicks do
+      sleep 4
+    end
+  else
+    sync :master_tick
+    if (pitch == 0)
+      live_loop :kicks do
+        4.times do
+          sample :bd_tek, rate: 0.8
+          sleep 1
+        end
+      end
+    else
+      live_loop :kicks do
+        4.times do
+          with_fx :echo, mix: 0.4, phase: [0.25,0.5,0.75].tick do
+            sample :bd_tek, rate: 0.8
+          end
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+define :snare do |on, pitch|
+  if (on == 0)
+    live_loop :snare do
+      sleep 1
+    end
+  else
+    sync :kicks
+    if (pitch == 0)
+      live_loop :snare do
+        sleep 1
+        sample :bd_haus
+        sleep 2
+        sample :bd_haus
+        sleep 1
+      end
+    else
+      live_loop :snare do
+        with_fx :echo, phase: 0.25 do
+          sleep 1
+          sample :bd_haus
+          sleep 2
+          sample :bd_haus
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+define :ticky do |on|
+  if (on == 0)
+    live_loop :hihat do
+      live_loop :pp do
+        sleep 0.5
+      end
+      sleep 0.5
+    end
+  else
+    if (on == 1)
+      live_loop :hihat do
+        sync :kicks
+        sleep 0.5
+        live_loop :pp do
+          sample :drum_cymbal_closed, rate: 0.825, amp: 0.75 #:bd_tek
+          sleep 1
+        end
+      end
+    else
+      live_loop :hihat do
+        sync :kicks
+        sleep 0.5
+        live_loop :pp do
+          with_fx :echo, mix: 0.25 do
+            sample :drum_cymbal_closed, rate: 0.925, amp: 0.75 #:bd_tek
+          end
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+define :instSample do |note|
+  if (note == 0)
+    live_loop :armstrong do
+      sleep 1
+    end
+  else
+    sync :kicks
+    if (note == 1)
+      live_loop :armstrong do
+        #OG loop sound 1.14545454545
+        ##| with_fx :reverb, mix: 0.5 do
+        with_fx :ixi_techno, mix: 0.75, phase: 0.5 do
+          sample "/Users/srothst1/Desktop/book_em_music_0.wav", amp: 1.05, rate: 1.157, start: 0.04, finish: 0.43
+        end
+        sleep 8
+      end
+    else
+      live_loop :armstrong do
+        with_fx :reverb, mix: 0.5 do
+          sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 1.05, rate: 1.152, start: 0.0295, finish: 0.25
+        end
+        sleep 4
+        with_fx :reverb, mix: 0.5 do
+          sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 1.05, rate: 1.152, start: 0.0295, finish: 0.25
+        end
+        sleep 4
+      end
+    end
+  end
+end
+
+define :vocalSample do |note|
+  if (note == 0)
+    live_loop :armweak do
+      sleep 1
+    end
+  else
+    if (note == 1)
+      #book em long loop
+      sync :armstrong
+      live_loop :armweak do
+        with_fx :reverb, mix: 0.5 do
+          sample "/Users/srothst1/Desktop/book_em_vocals_1.wav", amp: 1.05, rate: 1.157, start: 0.06, finish: 1.00
+        end
+        sleep 16
+      end
+    else
+      if (note == 2)
+        #book em
+        sync :armstrong
+        live_loop :armweak do
+          with_fx :reverb, mix: 0.5 do
+            sample "/Users/srothst1/Desktop/book_em_vocals_1.wav", amp: 1.05, rate: 1.157, start: 0.06, finish: 0.28
+          end
+          sleep 8
+        end
+      else
+        #got me doing mighty things, look at me
+        sync :armstrong
+        live_loop :armweak do
+          ##| sleep 1
+          sleep 3
+          with_fx :reverb, mix: 0.5 do
+            sample "/Users/srothst1/Desktop/book_em_vocals_2.wav", amp: 1.05, rate: 1.157, start: 0.065, finish: 0.39
+          end
+          ##| sleep 7
+          sleep 5
+          sleep 2
+          with_fx :echo, mix: 1.0, phase: 1.0 do
+            sample "/Users/srothst1/Desktop/book_em_vocals_2.wav", amp: 1.5, rate: 1.157, start: 0.74, finish: 1.00
+          end
+          sleep 6
+        end
+      end
+    end
+  end
+end
+
+
+
+##| startSong #do once and then comment out
+kick(1,0)
+snare(1,0) #sounds like shit rn
+ticky(2) #2 sounds best
+instSample(2)
+vocalSample(0)
+
+
+#
