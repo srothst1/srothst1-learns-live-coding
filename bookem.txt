@@ -54,7 +54,7 @@ end
 define :snare do |on, pitch|
   if (on == 0)
     live_loop :snare do
-      sleep 1
+      sleep 4
     end
   else
     sync :kicks
@@ -84,9 +84,9 @@ define :ticky do |on|
   if (on == 0)
     live_loop :hihat do
       live_loop :pp do
-        sleep 0.5
+        sleep 4
       end
-      sleep 0.5
+      sleep 4
     end
   else
     if (on == 1)
@@ -116,7 +116,7 @@ end
 define :instSample do |note|
   if (note == 0)
     live_loop :armstrong do
-      sleep 1
+      sleep 4
     end
   else
     sync :kicks
@@ -150,12 +150,12 @@ end
 define :vocalSample do |note|
   if (note == 0)
     live_loop :armweak do
-      sleep 1
+      sleep 4
     end
   else
     if (note == 1)
       #book em long loop
-      sync :armstrong
+      sync :baby_tick
       live_loop :armweak do
         with_fx :reverb, mix: 0.5 do
           sample "/Users/srothst1/Desktop/book_em_vocals_1.wav", amp: 1.05, rate: 1.157, start: 0.06, finish: 1.00
@@ -165,7 +165,7 @@ define :vocalSample do |note|
     else
       if (note == 2)
         #book em
-        sync :armstrong
+        sync :baby_tick
         live_loop :armweak do
           with_fx :reverb, mix: 0.5 do
             sample "/Users/srothst1/Desktop/book_em_vocals_1.wav", amp: 1.05, rate: 1.157, start: 0.06, finish: 0.28
@@ -174,20 +174,17 @@ define :vocalSample do |note|
         end
       else
         #got me doing mighty things, look at me
-        sync :armstrong
+        sync :baby_tick
         live_loop :armweak do
-          ##| sleep 1
-          sleep 3
+          sleep 1
           with_fx :reverb, mix: 0.5 do
             sample "/Users/srothst1/Desktop/book_em_vocals_2.wav", amp: 1.05, rate: 1.157, start: 0.065, finish: 0.39
           end
-          ##| sleep 7
           sleep 5
-          sleep 2
           with_fx :echo, mix: 1.0, phase: 1.0 do
             sample "/Users/srothst1/Desktop/book_em_vocals_2.wav", amp: 1.5, rate: 1.157, start: 0.74, finish: 1.00
           end
-          sleep 6
+          sleep 10
         end
       end
     end
@@ -200,10 +197,10 @@ define :bassline do |on, oct_down|
   notes = [50] #50,
   if (on == 0)
     live_loop :dp do
-      sleep 1
+      sleep 4
     end
     live_loop :dpp do
-      sleep 1
+      sleep 4
     end
   else
     live_loop :dp do
@@ -235,9 +232,9 @@ end
 ##| startSong #do once and then comment out
 kick(1,0)
 snare(1,0) #sounds like shit rn
-ticky(2) #2 sounds best
-instSample(1)
-vocalSample(2)
+ticky(0) #2 sounds best
+instSample(2)
+vocalSample(1)
 
 
 #
