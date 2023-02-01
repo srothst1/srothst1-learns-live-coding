@@ -4,6 +4,9 @@
 ##| 113 bpm
 ##| g major key
 
+
+# Shader: https://www.shadertoy.com/view/3sc3z4
+
 ##| ________
 ##| K_K_K_K_
 ##| __S___S_
@@ -112,6 +115,8 @@ define :ticky do |on|
     end
   end
 end
+
+#Thank you for watching <3 - srothst1
 
 define :instSample do |note, speed|
   if (note == 0)
@@ -233,9 +238,9 @@ end
 ##| startSong #do once and then comment out
 kick(1,0)
 snare(1,0) #sounds like shit rn
-ticky(2) #2 sounds best
-instSample(1,1)
-vocalSample(1)
+ticky(0) #2 sounds best
+instSample(0,1)
+vocalSample(3)
 
 
 #
