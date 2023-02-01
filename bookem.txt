@@ -113,7 +113,7 @@ define :ticky do |on|
   end
 end
 
-define :instSample do |note|
+define :instSample do |note, speed|
   if (note == 0)
     live_loop :armstrong do
       sleep 4
@@ -128,19 +128,20 @@ define :instSample do |note|
         with_fx :ixi_techno, mix: 0.75, phase: 4.0, cutoff_min: 107.5, cutoff_max: 120, res: 0.6 do
           sample "/Users/srothst1/Desktop/book_em_music_0.wav", amp: 1.05, rate: 1.157, start: 0.04, finish: 0.43
         end
-        sleep 8
+        sleep 8/speed
       end
     else
       live_loop :armstrong do
         with_fx :ixi_techno, mix: 0.75, phase: 4.0, cutoff_min: 107.5, cutoff_max: 120, res: 0.6 do
+          start = 0.42
           with_fx :reverb, mix: 0.5 do
-            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 0.75, rate: 1.153, start: 0.0295, finish: 0.2555
+            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 0.75, rate: 1.153, start: start, finish: start + 0.226
           end
-          sleep 4
+          sleep 4/speed
           with_fx :reverb, mix: 0.5 do
-            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 0.75, rate: 1.153, start: 0.0295, finish: 0.2555
+            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 0.75, rate: 1.153, start: start, finish: start + 0.226
           end
-          sleep 4
+          sleep 4/speed
         end
       end
     end
@@ -232,8 +233,8 @@ end
 ##| startSong #do once and then comment out
 kick(1,0)
 snare(1,0) #sounds like shit rn
-ticky(0) #2 sounds best
-instSample(2)
+ticky(2) #2 sounds best
+instSample(1,1)
 vocalSample(1)
 
 
