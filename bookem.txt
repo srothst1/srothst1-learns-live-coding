@@ -124,7 +124,8 @@ define :instSample do |note|
       live_loop :armstrong do
         #OG loop sound 1.14545454545
         ##| with_fx :reverb, mix: 0.5 do
-        with_fx :ixi_techno, mix: 0.75, phase: 0.5 do
+        ##| with_fx :ixi_techno, mix: 0.625, phase: 0.5 do
+        with_fx :ixi_techno, mix: 0.75, phase: 4.0, cutoff_min: 107.5, cutoff_max: 120, res: 0.6 do
           sample "/Users/srothst1/Desktop/book_em_music_0.wav", amp: 1.05, rate: 1.157, start: 0.04, finish: 0.43
         end
         sleep 8
@@ -133,11 +134,11 @@ define :instSample do |note|
       live_loop :armstrong do
         with_fx :ixi_techno, mix: 0.75, phase: 4.0, cutoff_min: 107.5, cutoff_max: 120, res: 0.6 do
           with_fx :reverb, mix: 0.5 do
-            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 1.05, rate: 1.152, start: 0.0295, finish: 0.2555
+            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 0.75, rate: 1.153, start: 0.0295, finish: 0.2555
           end
           sleep 4
           with_fx :reverb, mix: 0.5 do
-            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 1.05, rate: 1.152, start: 0.0295, finish: 0.2555
+            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 0.75, rate: 1.153, start: 0.0295, finish: 0.2555
           end
           sleep 4
         end
@@ -194,6 +195,42 @@ define :vocalSample do |note|
 end
 
 
+define :bassline do |on, oct_down|
+  ##| notes = chord(:G, :major, invert: 1).shuffle
+  notes = [50] #50,
+  if (on == 0)
+    live_loop :dp do
+      sleep 1
+    end
+    live_loop :dpp do
+      sleep 1
+    end
+  else
+    live_loop :dp do
+      sync :kicks
+      sleep 0.5
+      am = 0.75
+      live_loop :dpp do
+        use_synth :fm
+        sleep 3
+        with_fx :ixi_techno, mix: 0.2 do
+          play notes.choose, amp: am, pitch: oct_down * -12
+        end
+        sleep 0.5
+        with_fx :ixi_techno, mix: 0.2 do
+          play notes.choose, amp: am, pitch: oct_down * -12
+        end
+        sleep 0.5
+        with_fx :ixi_techno, mix: 0.4 do
+          play notes.choose, amp: am, pitch: oct_down * -12
+        end
+        ##| end
+      end
+    end
+  end
+end
+
+##| bassline(1,0) #[on (0,1), oct_down (2,3)]
 
 ##| startSong #do once and then comment out
 kick(1,0)
