@@ -131,14 +131,16 @@ define :instSample do |note|
       end
     else
       live_loop :armstrong do
-        with_fx :reverb, mix: 0.5 do
-          sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 1.05, rate: 1.152, start: 0.0295, finish: 0.25
+        with_fx :ixi_techno, mix: 0.75, phase: 4.0, cutoff_min: 107.5, cutoff_max: 120, res: 0.6 do
+          with_fx :reverb, mix: 0.5 do
+            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 1.05, rate: 1.152, start: 0.0295, finish: 0.2555
+          end
+          sleep 4
+          with_fx :reverb, mix: 0.5 do
+            sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 1.05, rate: 1.152, start: 0.0295, finish: 0.2555
+          end
+          sleep 4
         end
-        sleep 4
-        with_fx :reverb, mix: 0.5 do
-          sample "/Users/srothst1/Desktop/book_em_music_2.wav", amp: 1.05, rate: 1.152, start: 0.0295, finish: 0.25
-        end
-        sleep 4
       end
     end
   end
@@ -197,8 +199,8 @@ end
 kick(1,0)
 snare(1,0) #sounds like shit rn
 ticky(2) #2 sounds best
-instSample(2)
-vocalSample(0)
+instSample(1)
+vocalSample(2)
 
 
 #
