@@ -1,0 +1,162 @@
+# Even techno basics with srothst1
+
+##| ________
+##| K_K_K_K_
+##| __S___S_
+##| _H_H_H_H
+
+use_bpm 126
+
+
+define :kick do |on|
+  if (on == 0)
+    live_loop :kicks do
+      sleep 4
+    end
+  else
+    live_loop :kicks do
+      sample :bd_tek, amp: 0.8
+      sleep 1
+    end
+  end
+end
+
+define :snare do |on|
+  if (on == 0)
+    live_loop :snare do
+      sleep 4
+    end
+  else
+    live_loop :snare do
+      sync :kicks
+      sleep 1
+      sample :bd_haus, amp: 1.2
+      sleep 2
+      sample :bd_haus, amp: 1.2
+      sleep 1
+    end
+  end
+end
+
+
+define :ticky do |on|
+  if (on == 0)
+    live_loop :hihat do
+      live_loop :pp do
+        sleep 4
+      end
+      sleep 4
+    end
+  else
+    if (on == 1)
+      live_loop :hihat do
+        sync :kicks
+        sleep 0.5
+        live_loop :pp do
+          sample :drum_cymbal_closed, rate: 0.925, amp: 0.75 #:bd_tek
+          sleep 1
+        end
+      end
+    else
+      live_loop :hihat do
+        sync :kicks
+        sleep 0.5
+        live_loop :pp do
+          with_fx :echo, mix: 0.5 do
+            sample :drum_cymbal_closed, rate: 0.925, amp: 0.75 #:bd_tek
+          end
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+define :vocalSample do |on|
+  if (on == 0)
+    live_loop :ssample do
+      sleep 4
+    end
+    live_loop :ssample_inner do
+      sleep 4
+    end
+  else
+    if (on == 1)
+      live_loop :ssample do
+        sync :kicks
+        sample "/Users/srothst1/Desktop/love_around_vocals_0.wav", amp: 1.00, rate: 1.125, start: 0.120, finish: 1.00
+        sleep 8
+        sample "/Users/srothst1/Desktop/love_around_vocals_1.wav", amp: 1.00, rate: 1.125, start: 0.09, finish: 1.00
+        sleep 8
+      end
+    else
+      if (on == 2)
+        live_loop :ssample do
+          sync :kicks
+          sleep 0.5
+          live_loop :ssample_inner do
+            with_fx :echo, phase: 0.5 do
+              sample "/Users/srothst1/Desktop/love_around_vocals_2.wav", amp: 0.60, rate: 0.60, start: 0.15, finish: 0.20
+            end
+            sleep 4
+            with_fx :echo, phase: 0.5 do
+              sample "/Users/srothst1/Desktop/love_around_vocals_2.wav", amp: 0.60, rate: 0.80, start: 0.15, finish: 0.20
+            end
+            sleep 4
+          end
+        end
+      else
+        if (on == 3)
+          live_loop :ssample do
+            sync :kicks
+            sample "/Users/srothst1/Desktop/love_around_vocals_3.wav", amp: 1.50, rate: 1.125, start: 0.15, finish: 1.00
+            sleep 8
+          end
+        else
+          if (on == 4)
+            live_loop :ssample do
+              sync :kicks
+              with_fx :echo, phase: 2.0 do
+                sample "/Users/srothst1/Desktop/love_around_vocals_1.wav", amp: 1.00, rate: 1.125, start: 0.09, finish: 1.00
+              end
+              sleep 8
+              sample "/Users/srothst1/Desktop/love_around_vocals_1.wav", amp: 1.00, rate: 1.125, start: 0.09, finish: 1.00
+              sleep 8
+            end
+          else
+            live_loop :ssample do
+              sync :kicks
+              sample "/Users/srothst1/Desktop/love_around_vocals_3.wav", amp: 1.50, rate: 1.125, start: 0.15, finish: 1.00
+              sleep 6
+              with_fx :echo, phase: 0.5 do
+                sample "/Users/srothst1/Desktop/love_around_vocals_3.wav", amp: 1.50, rate: 1.125, start: 0.6, finish: 1.00
+              end
+              sleep 2
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+
+kick(1)
+snare(1)
+ticky(2)
+vocalSample(3)
+
+
+#SINGING
+
+#GOOD
+##| live_loop :ssample do
+##|   sync :kicks
+##|   sample "/Users/srothst1/Desktop/love_around_vocals_3.wav", amp: 1.50, rate: 1.125, start: 0.15, finish: 1.00
+##|   sleep 6
+##|   with_fx :echo, phase: 0.5 do
+##|     sample "/Users/srothst1/Desktop/love_around_vocals_3.wav", amp: 1.50, rate: 1.125, start: 0.6, finish: 1.00
+##|   end
+##|   sleep 2
+##| end
+
