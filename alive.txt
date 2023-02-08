@@ -112,27 +112,9 @@ define :ticky do |on|
   end
 end
 
-##| notes = [51,53,56,51,48,46,48,51,46,48,51,46,48,53,56,58,61]
-##| notes = [51,53,56,51,48,46,48,46]
-##| notes = [51,53,56,51]
-##| ##| notes = [53,56,58,61]
-##| a = 0.00 #0.20 but amp is fucked
-##| ps = 0.5
-##| live_loop :synth_inner do
-##|   sync :kicks
-##|   use_synth :bass_foundation
-##|   4.times do
-##|     with_fx :ixi_techno, phase: ps do
-##|       play notes.tick, amp: a
-##|     end
-##|     sleep ps
-##|   end
-##| end
-
-
 kick(1,0)
 snare(1,0)
-ticky(1)
+ticky(2)
 
 live_loop :ms0 do
   a = 0.00 #0.80
@@ -168,6 +150,13 @@ live_loop :vs20 do
   sleep s
 end
 
+live_loop :vs10 do
+  a = 0.00 #1.00
+  sync :kicks
+  sample "/Users/srothst1/Desktop/alive_v_1.wav", amp: a, rate: rate, start: 0.04, finish: 0.1
+  sleep 2
+end
+
 live_loop :vs21 do
   a = 0.00 #1.00
   s = 8 #8 and 4 sound good
@@ -175,6 +164,33 @@ live_loop :vs21 do
   sample "/Users/srothst1/Desktop/alive_v_2.wav", amp: a, rate: rate, start: 0.746, finish: 0.955
   sleep s
 end
+
+
+
+##| notes = [51,53,56,51,48,46,48,51,46,48,51,46,48,53,56,58,61]
+##| notes = [51,53,56,51,48,46,48,46]
+##| notes = [51,53,56,51]
+notes = [53,56,58,61]
+ammp = 0.30 #0.20
+ps = 0.5 #0.5
+live_loop :synth_inner do
+  sync :kicks
+  live_loop :synth_inner do
+    ##| use_synth :bass_foundation #:dull_bell #:pretty_bell #:blade
+    use_synth :pretty_bell
+    with_fx :echo, phase: ps do
+      play notes.choose, amp: ammp
+      sleep ps*1.0
+      play notes.tick, amp: ammp
+      sleep ps*0.5
+      play notes.tick, amp: ammp
+      sleep ps*1.0
+      play notes.tick, amp: ammp
+      sleep ps*1.5
+    end
+  end
+end
+
 
 #LOOP EXPLORATION
 #NGL it sounds too long
@@ -194,12 +210,6 @@ end
 ##| end
 
 ##NGL this sounds pretty short and not great
-##| live_loop :vs10 do
-##|   a = 0.00 #1.00
-##|   sync :kicks
-##|   sample "/Users/srothst1/Desktop/alive_v_1.wav", amp: a, rate: rate, start: 0.04, finish: 0.1
-##|   sleep 2
-##| end
 
 ##NGL this sounds pretty short and not great
 ##| live_loop :vs11 do
@@ -213,8 +223,9 @@ end
 
 ##NGL not quite right but not bad
 ##| live_loop :vs12 do
-##|   a = 0.90 #1.00
+##|   a = 0.00 #1.00
 ##|   sync :kicks
 ##|   sample "/Users/srothst1/Desktop/alive_v_1.wav", amp: a, rate: rate, start: 0.2875, finish: 0.58
 ##|   sleep 8
 ##| end
+
