@@ -1,0 +1,180 @@
+# Even techno basics with srothst1
+
+##| ________
+##| K_K_K_K_
+##| __S___S_
+##| _H_H_H_H
+
+bpm = 104.0
+use_bpm bpm
+
+live_loop :master_tick do
+  sleep 4
+end
+
+live_loop :baby_tick do
+  sleep 1
+end
+##| define :kick do |on|
+##|   if (on == 0)
+##|     live_loop :kicks do
+##|       sleep 4
+##|     end
+##|   else
+##|     live_loop :kicks do
+##|       sample :bd_tek, amp: 0.8
+##|       sleep 1
+##|     end
+##|   end
+##| end
+
+##| define :snare do |on|
+##|   if (on == 0)
+##|     live_loop :snare do
+##|       sleep 4
+##|     end
+##|   else
+##|     live_loop :snare do
+##|       sync :kicks
+##|       sleep 1
+##|       sample :bd_haus, amp: 1.2
+##|       sleep 2
+##|       sample :bd_haus, amp: 1.2
+##|       sleep 1
+##|     end
+##|   end
+##| end
+
+define :kick do |on, pitch|
+  if (on == 0)
+    live_loop :kicks do
+      sleep 4
+    end
+  else
+    sync :master_tick
+    if (pitch == 0)
+      live_loop :kicks do
+        4.times do
+          sample :bd_tek, rate: 0.8
+          sleep 1
+        end
+      end
+    else
+      live_loop :kicks do
+        4.times do
+          with_fx :echo, mix: 0.4, phase: [0.25,0.5,0.75].tick do
+            sample :bd_tek, rate: 0.8
+          end
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+define :snare do |on, pitch|
+  if (on == 0)
+    live_loop :snare do
+      sleep 1
+    end
+  else
+    sync :kicks
+    if (pitch == 0)
+      live_loop :snare do
+        sleep 1
+        sample :bd_haus
+        sleep 2
+        sample :bd_haus
+        sleep 1
+      end
+    else
+      live_loop :snare do
+        with_fx :echo, phase: 0.25 do
+          sleep 1
+          sample :bd_haus
+          sleep 2
+          sample :bd_haus
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+
+define :ticky do |on|
+  if (on == 0)
+    live_loop :hihat do
+      live_loop :pp do
+        sleep 4
+      end
+      sleep 4
+    end
+  else
+    if (on == 1)
+      live_loop :hihat do
+        sync :kicks
+        sleep 0.5
+        live_loop :pp do
+          sample :drum_cymbal_closed, rate: 0.925, amp: 0.75 #:bd_tek
+          sleep 1
+        end
+      end
+    else
+      live_loop :hihat do
+        sync :kicks
+        sleep 0.5
+        live_loop :pp do
+          with_fx :echo, mix: 0.5 do
+            sample :drum_cymbal_closed, rate: 0.925, amp: 0.75 #:bd_tek
+          end
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+kick(1,0)
+snare(1,0)
+ticky(2)
+
+#126/104 = 1.21153846154
+#120/104 = 1.15384615385
+sample_bpm = 104.0
+rate = bpm/sample_bpm
+duration = 0.592 + (0.592*((bpm - 120.0)/120.0))
+live_loop :ms0 do
+  sync :kicks
+  sample "/Users/srothst1/Desktop/alive_m_0.wav", amp: 0.75, rate: rate, start: 0.033, finish: 0.033 + duration
+  sleep 4
+end
+
+live_loop :ms1 do
+  sync :kicks
+  with_fx :reverb, room: 0.7 do
+    with_fx :echo, phase: 0.5 do
+      sample "/Users/srothst1/Desktop/alive_m_1.wav", amp: 0.35, rate: rate, start: 0.035, finish: 0.035+(0.475*0.68)
+    end
+  end
+  sleep 2
+end
+
+live_loop :vs00 do
+  sync :kicks
+  sample "/Users/srothst1/Desktop/alive_v_0.wav", amp: 1.25, rate: rate, start: 0.033, finish: 1.00
+  sleep 16
+end
+
+##| live_loop :vs01 do
+##|   sync :kicks
+##|   sample "/Users/srothst1/Desktop/alive_v_0.wav", amp: 1.25, rate: rate, start: 0.033, finish: 0.033 + duration
+##|   sleep 8
+##| end
+
+##| live_loop :vs02 do
+##|   sync :kicks
+##|   sample "/Users/srothst1/Desktop/alive_v_0.wav", amp: 1.00, rate: rate, start: 0.59, finish: 1.00
+##|   sleep 8 #8 and 4 sound amazing
+##| end
+
