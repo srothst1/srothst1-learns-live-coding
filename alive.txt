@@ -144,31 +144,31 @@ ticky(2)
 sample_bpm = 104.0
 rate = bpm/sample_bpm
 duration = 0.592 + (0.592*((bpm - 120.0)/120.0))
-live_loop :ms0 do
-  sync :kicks
-  sample "/Users/srothst1/Desktop/alive_m_0.wav", amp: 0.75, rate: rate, start: 0.033, finish: 0.033 + duration
-  sleep 4
-end
+##| live_loop :ms0 do
+##|   sync :kicks
+##|   sample "/Users/srothst1/Desktop/alive_m_0.wav", amp: 0.75, rate: rate, start: 0.033, finish: 0.033 + duration
+##|   sleep 4
+##| end
 
-live_loop :ms1 do
-  sync :kicks
-  with_fx :reverb, room: 0.7 do
-    with_fx :echo, phase: 0.5 do
-      sample "/Users/srothst1/Desktop/alive_m_1.wav", amp: 0.35, rate: rate, start: 0.035, finish: 0.035+(0.475*0.68)
-    end
-  end
-  sleep 2
-end
+##| live_loop :ms1 do
+##|   sync :kicks
+##|   with_fx :reverb, room: 0.7 do
+##|     with_fx :echo, phase: 0.5 do
+##|       sample "/Users/srothst1/Desktop/alive_m_1.wav", amp: 0.35, rate: rate, start: 0.035, finish: 0.035+(0.475*0.68)
+##|     end
+##|   end
+##|   sleep 2
+##| end
 
-live_loop :vs00 do
-  sync :kicks
-  sample "/Users/srothst1/Desktop/alive_v_0.wav", amp: 1.25, rate: rate, start: 0.033, finish: 1.00
-  sleep 16
-end
+##| live_loop :vs00 do
+##|   sync :kicks
+##|   sample "/Users/srothst1/Desktop/alive_v_0.wav", amp: 1.25, rate: rate, start: 0.036, finish: 1.00
+##|   sleep 16
+##| end
 
 ##| live_loop :vs01 do
 ##|   sync :kicks
-##|   sample "/Users/srothst1/Desktop/alive_v_0.wav", amp: 1.25, rate: rate, start: 0.033, finish: 0.033 + duration
+##|   sample "/Users/srothst1/Desktop/alive_v_0.wav", amp: 1.25, rate: rate, start: 0.036, finish: 0.033 + duration
 ##|   sleep 8
 ##| end
 
@@ -177,4 +177,10 @@ end
 ##|   sample "/Users/srothst1/Desktop/alive_v_0.wav", amp: 1.00, rate: rate, start: 0.59, finish: 1.00
 ##|   sleep 8 #8 and 4 sound amazing
 ##| end
+
+live_loop :vs10 do
+  sync :kicks
+  sample "/Users/srothst1/Desktop/alive_v_1.wav", amp: 1.00, rate: rate, start: 0.036, finish: 1.00
+  sleep 8 #8 and 4 sound amazing
+end
 
