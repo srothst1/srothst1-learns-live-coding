@@ -12,7 +12,7 @@ use_bpm bpm
 #120/104 = 1.15384615385
 sample_bpm = 104.0
 rate = bpm/sample_bpm
-duration = 0.592 + (0.592*((bpm - 120.0)/120.0))
+duration = 0.592 #+ (0.592*((bpm - 120.0)/120.0))
 
 live_loop :master_tick do
   sleep 4
@@ -114,7 +114,7 @@ end
 
 kick(1,0)
 snare(1,0)
-ticky(2)
+ticky(1)
 
 live_loop :ms0 do
   a = 0.00 #0.80
@@ -167,26 +167,26 @@ end
 
 
 
-##| notes = [51,53,56,51,48,46,48,51,46,48,51,46,48,53,56,58,61]
-##| notes = [51,53,56,51,48,46,48,46]
-##| notes = [51,53,56,51]
-notes = [53,56,58,61]
-ammp = 0.30 #0.20
+# notes = [53,56,0,58,0,61]
+notes = [56,56,0,53,0,61]
+ammp = 0.00 #0.20
 ps = 0.5 #0.5
 live_loop :synth_inner do
   sync :kicks
   live_loop :synth_inner do
     ##| use_synth :bass_foundation #:dull_bell #:pretty_bell #:blade
     use_synth :pretty_bell
-    with_fx :echo, phase: ps do
-      play notes.choose, amp: ammp
-      sleep ps*1.0
-      play notes.tick, amp: ammp
-      sleep ps*0.5
-      play notes.tick, amp: ammp
-      sleep ps*1.0
-      play notes.tick, amp: ammp
-      sleep ps*1.5
+    with_fx :echo, phase: 2.0 do
+      with_fx :echo, phase: ps do
+        play notes.choose, amp: ammp
+        sleep ps*1.0
+        play notes.tick, amp: ammp
+        sleep ps*0.5
+        play notes.tick, amp: ammp
+        sleep ps*1.0
+        play notes.tick, amp: ammp
+        sleep ps*1.5
+      end
     end
   end
 end
