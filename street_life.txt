@@ -161,19 +161,18 @@ end
 
 kick(1,0)
 snare(1,0)
-ticky(2)
+ticky(1)
 
 #vocals:
-
 live_loop :vs00 do
-  a = 0.5
+  a = 0.25
   sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.89, finish: 0.990 #0.055
   sleep 4
 end
 
 live_loop :vs01 do
   a = 1.00 #1.00
-  lpf = 130 #70 -> 130
+  lpf = 130 #130 -> 70
   with_fx :lpf, cutoff: lpf do
     sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.06, finish: 0.30 #0.055
     sleep 8
@@ -184,19 +183,22 @@ live_loop :vs01 do
   end
 end
 
+
 #synths:
+arp_b_amp = 1.25 #0.25 -> 1.00
+arp_b_lpf = 80 #80 -> 120
+
 live_loop :arp_b_0 do
-  amp = 0.4
+  amp = arp_b_amp - 0.25
   use_synth :fm
   with_fx :panslicer, phase: 8.0, pulse_width: 0.8, wave: 0, invert_wave: 1, smooth: 0.25, phase_offset: [0.0,0.25,0.5,0.75,1.0].tick do
     play arpeggiator(:c3, num_octaves: 0, chord: :m), release: 0.25, amp: amp
   end
   sleep 0.5
 end
-
 live_loop :arp_b_1 do
-  amp = 1.25
-  lpf = 80
+  amp = arp_b_amp + 0.25
+  lpf = arp_b_lpf
   use_synth :fm
   with_fx :lpf, cutoff: lpf do
     play arpeggiator(:c3, num_octaves: 0, chord: :m), release: 0.1, amp: amp
@@ -208,25 +210,32 @@ live_loop :arp_b_1 do
   sleep 0.5
 end
 
+
+arp_amp = 1.00
+arp_lpf = 70 - 5 #70 -> 130
+
 live_loop :arp_0 do
-  amp = 1.25
-  lpf = 70 - 5 #70 -> 130
+  amp = arp_amp
+  lpf = arp_lpf #70 - 5 #70 -> 130
   use_synth :fm
   with_fx :lpf, cutoff: lpf do
     play arpeggiator(:c4, num_octaves: 1, chord: :m).tick, release: 0.1, amp: amp
   end
   sleep 0.25
 end
-
 live_loop :arp_2 do
-  amp = 0.0
+  amp = arp_amp
   phase = 0.75 #0.8 -> 4.0
   use_synth :fm
-  with_fx :echo, phase: phase do
-    play arpeggiator(:c5, num_octaves: 1, chord: :m).look, release: 0.07, amp: amp
+  if (arp_lpf > 110)
+    with_fx :echo, phase: phase do
+      play arpeggiator(:c5, num_octaves: 1, chord: :m).look, release: 0.07, amp: amp
+    end
   end
   sleep [1,0.25,4].tick
 end
+
+# Thank you for listening <3 srothst1
 
 #Sad Loop Group:
 ##| play arpeggiator(:c4, num_octaves: 1, scale: :major, direction: :up, grouping: 3).tick, release: 0.1
