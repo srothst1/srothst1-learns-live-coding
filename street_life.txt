@@ -1,0 +1,250 @@
+define :arpeggiator do |root, options={}|
+  options[:num_octaves] ||= 1
+  options[:direction] ||= :up
+  options[:transpose] ||= nil
+  options[:grouping] ||= 0
+  
+  options[:chord] ||= :major
+  options[:scale] ||= nil
+  options[:notes] ||= nil
+  
+  if options[:notes]
+    # TODO: num_octaves for arbitrary notes
+    note_pool = Array(options[:notes]).ring
+  elsif options[:scale]
+    note_pool = scale(root, options[:scale], num_octaves: options[:num_octaves])
+  else
+    note_pool = options[:num_octaves].times.flat_map do |n|
+      chord(root, options[:chord]).map {|x| x + (n * 12) }
+    end
+  end
+  
+  # safety net
+  note_pool = Array(root) if note_pool.empty?
+  
+  # Make array for following transformations
+  note_pool = note_pool.to_a
+  
+  note_pool = case options[:direction]
+  when :up
+    note_pool.sort
+  when :down
+    note_pool.sort.reverse
+  when :updown
+    note_pool.sort + note_pool.sort.reverse[1..-1]
+  when :downup
+    note_pool.sort.reverse + note_pool.sort[1..-1]
+  when :random
+    note_pool.shuffle
+  when :from_notes
+    note_pool
+  end
+  
+  note_pool = if options[:grouping] != 0
+    # TODO stop this crashing if grouping > note_pool.length
+    note_pool.each_cons(options[:grouping]).to_a.flatten
+  else
+    note_pool
+  end
+  
+  (ring *note_pool)
+end
+
+bpm = 120.0
+use_bpm bpm
+
+sample_bpm = 130.0
+rate = bpm/sample_bpm
+
+live_loop :master_tick do
+  sleep 4
+end
+
+live_loop :baby_tick do
+  sleep 1
+end
+
+define :kick do |on, pitch|
+  if (on == 0)
+    live_loop :kicks do
+      sleep 4
+    end
+  else
+    sync :master_tick
+    if (pitch == 0)
+      live_loop :kicks do
+        4.times do
+          sample :bd_tek, rate: 0.8, amp: 1.5
+          sleep 1
+        end
+      end
+    else
+      live_loop :kicks do
+        4.times do
+          with_fx :echo, mix: 0.4, phase: [0.25,0.5,0.75].tick do
+            sample :bd_tek, rate: 0.8, amp: 1.5
+          end
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+define :snare do |on, pitch|
+  if (on == 0)
+    live_loop :snare do
+      sleep 1
+    end
+  else
+    sync :kicks
+    if (pitch == 0)
+      live_loop :snare do
+        with_fx :krush, mix: 0.2 do
+          sleep 1
+          ##| sample "/Users/srothst1/Desktop/clap.wav", amp: 2, start: 0.04, finish: 0.06
+          sample "/Users/srothst1/Desktop/clap.wav", amp: 2, start: 0.345, finish: 0.35, rate: 0.8
+          sleep 2
+          ##| sample "/Users/srothst1/Desktop/clap.wav", amp: 2, start: 0.04, finish: 0.06
+          with_fx :echo, phase: 0.25 do
+            sample "/Users/srothst1/Desktop/clap.wav", amp: 2, start: 0.345, finish: 0.35, rate: 0.8
+          end
+          sleep 1
+        end
+      end
+    else
+      live_loop :snare do
+        sleep 1
+        sample :bd_haus
+        sleep 2
+        sample :bd_haus
+        sleep 1
+      end
+    end
+  end
+end
+
+define :ticky do |on|
+  if (on == 0)
+    live_loop :hihat do
+      live_loop :pp do
+        sleep 0.5
+      end
+      sleep 0.5
+    end
+  else
+    if (on == 1)
+      live_loop :hihat do
+        sync :kicks
+        sleep 0.5
+        live_loop :pp do
+          sample :drum_cymbal_closed, rate: 0.925, amp: 1.00 #:bd_tek
+          sleep 1
+        end
+      end
+    else
+      live_loop :hihat do
+        sync :kicks
+        sleep 0.5
+        live_loop :pp do
+          with_fx :echo, mix: 0.25 do
+            sample :drum_cymbal_closed, rate: 0.925, amp: 1.00 #:bd_tek
+          end
+          sleep 1
+        end
+      end
+    end
+  end
+end
+
+#drums:
+
+kick(1,0)
+snare(1,0)
+ticky(1)
+
+#vocals:
+
+##| live_loop :vs00 do
+##|   a = 1.00 # 0.45 -> 1.00
+##|   sleep 0
+##|   sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a - 0.25, rate: rate, start: 0.06, finish: 0.07 #0.055
+##|   sleep 4
+##|   sleep 1.0
+##|   sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.89, finish: 0.990 #0.055
+##|   sleep 3.0
+##| end
+
+live_loop :vs01 do
+  a = 1.00 #1.00
+  lpf = 1.30
+  with_fx :lpf, cutoff: lpf do
+    sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.06, finish: 0.30 #0.055
+    sleep 8
+    sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.33, finish: 0.60 #0.055
+    sleep 10
+    sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.715, finish: 0.990 #0.055
+    sleep 12
+  end
+end
+
+#synths:
+
+#skip notes
+#play base notes
+#add sliders that modify a "filter"
+
+##| play arpeggiator(:c4, num_octaves: 1, scale: :major, direction: :up, grouping: 3).tick, release: 0.1
+live_loop :arp_b_0 do
+  amp = 0.4
+  use_synth :fm
+  with_fx :panslicer, phase: 8.0, pulse_width: 0.8, wave: 0, invert_wave: 1, smooth: 0.25, phase_offset: [0.0,0.25,0.5,0.75,1.0].tick do
+    play arpeggiator(:c3, num_octaves: 0, chord: :m), release: 0.25, amp: amp
+  end
+  sleep 0.5
+end
+
+live_loop :arp_b_1 do
+  amp = 1.25 #1.5
+  lpf = 60 #60 -> 130
+  use_synth :fm
+  with_fx :lpf, cutoff: lpf do
+    play arpeggiator(:c3, num_octaves: 0, chord: :m), release: 0.1, amp: amp
+  end
+  sleep 0.25
+  with_fx :lpf, cutoff: lpf do
+    play arpeggiator(:c3, num_octaves: 1, chord: :m).tick, release: 0.1, amp: amp
+  end
+  sleep 0.5
+end
+
+
+live_loop :arp_0 do
+  amp = 0.0
+  lpf = 120 #60 -> 130
+  use_synth :fm
+  with_fx :lpf, cutoff: lpf do
+    play arpeggiator(:c4, num_octaves: 1, chord: :m).tick, release: 0.1, amp: amp
+  end
+  sleep 0.25
+end
+
+
+live_loop :arp_1 do
+  amp = 0.00
+  use_synth :fm
+  with_fx :ixi_techno do
+    play arpeggiator(:c4, num_octaves: 2, chord: :m).tick, release: 0.15, amp: amp
+  end
+  sleep 0.25
+end
+
+live_loop :arp_2 do
+  amp = 0.0
+  phase = 4.0 #0.6 -> 4.0
+  use_synth :fm
+  with_fx :ixi_techno, phase: phase do
+    play arpeggiator(:c5, num_octaves: 1, chord: :m).tick, release: 0.15, amp: amp
+  end
+  sleep [0.25,0.5,0.5,0.75].tick
+end
