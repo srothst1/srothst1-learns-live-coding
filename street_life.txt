@@ -161,23 +161,19 @@ end
 
 kick(1,0)
 snare(1,0)
-ticky(1)
+ticky(2)
 
 #vocals:
 
-##| live_loop :vs00 do
-##|   a = 1.00 # 0.45 -> 1.00
-##|   sleep 0
-##|   sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a - 0.25, rate: rate, start: 0.06, finish: 0.07 #0.055
-##|   sleep 4
-##|   sleep 1.0
-##|   sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.89, finish: 0.990 #0.055
-##|   sleep 3.0
-##| end
+live_loop :vs00 do
+  a = 0.5
+  sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.89, finish: 0.990 #0.055
+  sleep 4
+end
 
 live_loop :vs01 do
   a = 1.00 #1.00
-  lpf = 1.30
+  lpf = 130 #70 -> 130
   with_fx :lpf, cutoff: lpf do
     sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.06, finish: 0.30 #0.055
     sleep 8
@@ -189,12 +185,6 @@ live_loop :vs01 do
 end
 
 #synths:
-
-#skip notes
-#play base notes
-#add sliders that modify a "filter"
-
-##| play arpeggiator(:c4, num_octaves: 1, scale: :major, direction: :up, grouping: 3).tick, release: 0.1
 live_loop :arp_b_0 do
   amp = 0.4
   use_synth :fm
@@ -205,8 +195,8 @@ live_loop :arp_b_0 do
 end
 
 live_loop :arp_b_1 do
-  amp = 1.25 #1.5
-  lpf = 60 #60 -> 130
+  amp = 1.25
+  lpf = 80
   use_synth :fm
   with_fx :lpf, cutoff: lpf do
     play arpeggiator(:c3, num_octaves: 0, chord: :m), release: 0.1, amp: amp
@@ -218,10 +208,9 @@ live_loop :arp_b_1 do
   sleep 0.5
 end
 
-
 live_loop :arp_0 do
-  amp = 0.0
-  lpf = 120 #60 -> 130
+  amp = 1.25
+  lpf = 70 - 5 #70 -> 130
   use_synth :fm
   with_fx :lpf, cutoff: lpf do
     play arpeggiator(:c4, num_octaves: 1, chord: :m).tick, release: 0.1, amp: amp
@@ -229,22 +218,23 @@ live_loop :arp_0 do
   sleep 0.25
 end
 
-
-live_loop :arp_1 do
-  amp = 0.00
-  use_synth :fm
-  with_fx :ixi_techno do
-    play arpeggiator(:c4, num_octaves: 2, chord: :m).tick, release: 0.15, amp: amp
-  end
-  sleep 0.25
-end
-
 live_loop :arp_2 do
   amp = 0.0
-  phase = 4.0 #0.6 -> 4.0
+  phase = 0.75 #0.8 -> 4.0
   use_synth :fm
-  with_fx :ixi_techno, phase: phase do
-    play arpeggiator(:c5, num_octaves: 1, chord: :m).tick, release: 0.15, amp: amp
+  with_fx :echo, phase: phase do
+    play arpeggiator(:c5, num_octaves: 1, chord: :m).look, release: 0.07, amp: amp
   end
-  sleep [0.25,0.5,0.5,0.75].tick
+  sleep [1,0.25,4].tick
 end
+
+#Sad Loop Group:
+##| play arpeggiator(:c4, num_octaves: 1, scale: :major, direction: :up, grouping: 3).tick, release: 0.1
+##| live_loop :arp_1 do
+##|   amp = 0.00
+##|   use_synth :fm
+##|   with_fx :ixi_techno do
+##|     play arpeggiator(:c4, num_octaves: 2, chord: :m).tick, release: 0.15, amp: amp
+##|   end
+##|   sleep 0.25
+##| end
