@@ -1,0 +1,258 @@
+bpm = 107.0
+use_bpm bpm
+
+sample_bpm = 107.0
+rate = bpm/sample_bpm
+
+#MIXER:
+kicks_amp_1 = 1.0
+
+clap_amp_1 = 1.0 ##
+
+ticks_0_amp_1 = 1.0 * 0.5
+ticks_1_amp_1 = 0.0 * 0.6
+
+amb_0_amp_1 = 2.00
+
+synth_b_0_amp_1 = 0.0
+synth_b_1_amp_1 = 1.0 ##
+synth_b_2_amp_1 = 0.0
+
+vs00_amp_1 = 1.0 * 2.0 ##
+vs01_amp_1 = 1.0 * 2.0
+vs02_amp_1 = 1.0 * 2.0 ##
+
+live_loop :kicks do
+  sample :bd_tek, rate: 0.8, amp: 1.5, amp: kicks_amp_1
+  sleep 1
+end
+
+live_loop :clap do
+  sleep 1
+  sample :mehackit_phone1, amp: 1, start: 0.13, finish: 0.35, rate: 0.6, amp: clap_amp_1
+  sleep 2
+  sample :mehackit_phone1, amp: 1, start: 0.13, finish: 0.35, rate: 0.6, amp: clap_amp_1
+  sleep 1
+end
+
+live_loop :ticks_0 do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_0 do
+    sample :drum_cymbal_closed, rate: 0.925, amp: 1.00, amp: ticks_0_amp_1
+    sleep 1
+  end
+end
+
+live_loop :ticks_1 do
+  pan = [-0.2,-0.1,0.0,0.1,0.2].tick
+  sync :kicks
+  live_loop :ticks_inner do
+    sleep 1
+    ##| with_fx :echo, phase: 0.25 do
+    sample :drum_cymbal_closed, rate: 0.925, amp: ticks_1_amp_1, pan: 1.5*pan
+    ##| end
+    sleep 1
+    with_fx :echo, phase: 0.75 do
+      sample :drum_cymbal_closed, rate: 0.925, amp: ticks_1_amp_1, pan: 1.5*pan
+    end
+    sleep 2
+  end
+end
+
+live_loop :amb_0 do
+  sync :kicks
+  use_synth :hollow
+  with_fx :reverb, mix: 0.7 do
+    use_synth :hollow
+    live_loop :note1 do
+      play choose([48,45]), attack: 6, release: 6, amp: amb_0_amp_1
+      sleep 8
+    end
+    
+    live_loop :note2 do
+      play choose([45,43]), attack: 4, release: 5, amp: amb_0_amp_1
+      sleep 10
+    end
+    
+    live_loop :note3 do
+      play choose([48, 45]), attack: 5, release: 5, amp: amb_0_amp_1
+      sleep 11
+    end
+  end
+end
+
+#synths:
+live_loop :synth_b_0 do
+  notes = [48,45] # [48,48] c major
+  ##| notes = [53,53] #f minor
+  use_synth :fm
+  sync :kicks
+  sleep 0.5
+  live_loop :synth_b_inner_0 do
+    sleep 3
+    play notes.tick, decay: 0.5, amp: synth_b_0_amp_1
+    sleep 1
+    play notes.tick, decay: 0.25, amp: synth_b_0_amp_1
+  end
+end
+
+live_loop :synth_b_1 do
+  notes = [48] #[48,48,48,48,48,48,48,45] #c major
+  ##| notes = [53,53,53,53,53,53,53,55] #f minor
+  use_synth :fm
+  sync :kicks
+  live_loop :synth_b_1_inner do
+    sleep 1
+    with_fx :echo, phase: 0.25 do
+      with_fx :octaver, mix: 0.03 do
+        play notes.tick, decay: 0.5, amp: synth_b_1_amp_1
+      end
+    end
+    sleep 1
+    with_fx :echo, phase: 0.75 do
+      play notes.tick, decay: 0.5, amp: synth_b_1_amp_1
+    end
+    sleep 2
+  end
+end
+
+live_loop :synth_b_2 do
+  notes = [48,48,48,48,45,45,45,45] # [48,48] c major
+  ##| notes = [53,53] #f minor
+  use_synth :fm
+  ##| sync :kicks
+  sleep 0.5
+  live_loop :synth_b_inner_2 do
+    play notes.tick, decay: 0.75, amp: synth_b_2_amp_1
+    sleep 1
+  end
+end
+
+#vocals:
+live_loop :ms00 do
+  a = 0.0
+  sample "/Users/srothst1/Desktop/change_m_0.wav", amp: a, rate: rate, start: 0.045, finish: 0.48
+  sleep 4
+  sample "/Users/srothst1/Desktop/change_m_0.wav", amp: a, rate: rate, start: 0.045, finish: 0.48
+  sleep 4
+end
+
+live_loop :ms01 do
+  a = 0.0
+  sample "/Users/srothst1/Desktop/change_m_1.wav", amp: a, rate: rate, start: 0.04, finish: 0.95
+  sleep 8
+end
+
+live_loop :vs00 do
+  with_fx :lpf, cutoff: 100 do
+    sample "/Users/srothst1/Desktop/riverbed_v_0.wav", amp: vs00_amp_1, rate: rate, start: 0.01, finish: 0.18
+    sleep 5
+    sleep 3
+    sleep 12
+  end
+end
+
+live_loop :vs01 do
+  with_fx :lpf, cutoff: 110 do
+    sleep 5
+    sample "/Users/srothst1/Desktop/riverbed_v_0.wav", amp: vs01_amp_1, rate: rate, start: 0.18, finish: 0.255
+    sleep 3
+    sample "/Users/srothst1/Desktop/riverbed_v_0.wav", amp: vs01_amp_1, rate: rate, start: 0.66, finish: 0.805 #0.67 for river in every
+    sleep 12
+  end
+end
+
+live_loop :vs02 do
+  with_fx :lpf, cutoff: 110 do
+    sleep 8
+    sleep 5
+    sample "/Users/srothst1/Desktop/riverbed_v_0.wav", amp: vs02_amp_1, rate: rate, start: 0.82, finish: 1.00
+    sleep 2
+    sample "/Users/srothst1/Desktop/riverbed_v_0.wav", amp: vs02_amp_1, rate: rate, start: 0.82, finish: 1.00
+    sleep 2
+    sample "/Users/srothst1/Desktop/riverbed_v_0.wav", amp: vs02_amp_1, rate: rate, start: 0.82, finish: 1.00
+    sleep 3
+  end
+end
+
+
+##DEMO:
+arp_amp = 0.00
+arp_lpf = 130 - 5 #70 -> 130
+arp_pitch = 0.00 #0.00 -> 0.75
+
+live_loop :arp_0 do
+  amp = arp_amp
+  lpf = arp_lpf #70 - 5 #70 -> 130
+  use_synth :fm
+  with_fx :lpf, cutoff: lpf do
+    play arpeggiator(:c3, num_octaves: 1, chord: :m).tick, release: 0.9, decay: 0.15, cutoff: 130, amp: amp, pitch: arp_pitch
+  end
+  sleep 1.0
+end
+live_loop :arp_2 do
+  amp = arp_amp
+  phase = 0.75 #0.8 -> 4.0
+  use_synth :fm
+  if (arp_lpf > 110)
+    with_fx :echo, phase: phase do
+      play arpeggiator(:c4, num_octaves: 1, chord: :m).look, release: 0.8, decay: 0.15, cutoff: 130, amp: amp
+    end
+  end
+  sleep [1,0.25,4].tick
+end
+
+# Functions:
+define :arpeggiator do |root, options={}|
+  options[:num_octaves] ||= 1
+  options[:direction] ||= :up
+  options[:transpose] ||= nil
+  options[:grouping] ||= 0
+  
+  options[:chord] ||= :major
+  options[:scale] ||= nil
+  options[:notes] ||= nil
+  
+  if options[:notes]
+    # TODO: num_octaves for arbitrary notes
+    note_pool = Array(options[:notes]).ring
+  elsif options[:scale]
+    note_pool = scale(root, options[:scale], num_octaves: options[:num_octaves])
+  else
+    note_pool = options[:num_octaves].times.flat_map do |n|
+      chord(root, options[:chord]).map {|x| x + (n * 12) }
+    end
+  end
+  
+  # safety net
+  note_pool = Array(root) if note_pool.empty?
+  
+  # Make array for following transformations
+  note_pool = note_pool.to_a
+  
+  note_pool = case options[:direction]
+  when :up
+    note_pool.sort
+  when :down
+    note_pool.sort.reverse
+  when :updown
+    note_pool.sort + note_pool.sort.reverse[1..-1]
+  when :downup
+    note_pool.sort.reverse + note_pool.sort[1..-1]
+  when :random
+    note_pool.shuffle
+  when :from_notes
+    note_pool
+  end
+  
+  note_pool = if options[:grouping] != 0
+    # TODO stop this crashing if grouping > note_pool.length
+    note_pool.each_cons(options[:grouping]).to_a.flatten
+  else
+    note_pool
+  end
+  
+  (ring *note_pool)
+end
+
