@@ -1,0 +1,71 @@
+# composed by srothst1
+
+bpm = 124.0
+use_bpm bpm
+
+sample_bpm = 124.0
+rate = bpm/sample_bpm
+
+##| live_loop :kick do
+##|   sample :bd_tek, rate: 0.8
+##|   sleep 1
+##| end
+
+define :s0 do
+  sample "/Users/srothst1/Desktop/bd_0.wav", rate: rate, amp: 0.75, start: 0.0725, finish: 0.545
+end
+
+define :s1 do
+  #sample "/Users/srothst1/Desktop/bd_3.wav", rate: rate, amp: 0.75, start: 0.013, finish: 0.9425
+  sample "/Users/srothst1/Desktop/bd_4.wav", rate: rate, amp: 0.75, start: 0.1475, finish: 0.875
+end
+
+define :s2 do
+  sample "/Users/srothst1/Desktop/bd_1.wav", rate: rate, amp: 0.75, start: 0.05, finish: 0.945
+end
+
+define :s3 do
+  sample "/Users/srothst1/Desktop/bd_2.wav", rate: rate, amp: 0.75, start: 0.23, finish: 0.94
+end
+
+define :s4 do
+  #sample "/Users/srothst1/Desktop/bd_3.wav", rate: rate, amp: 0.75, start: 0.013, finish: 0.9425
+  sample "/Users/srothst1/Desktop/bd_3.wav", rate: rate, amp: 0.75, start: 0.075, finish: 0.975
+end
+
+
+define :s5 do
+  #sample "/Users/srothst1/Desktop/bd_3.wav", rate: rate, amp: 0.75, start: 0.013, finish: 0.9425
+  sample "/Users/srothst1/Desktop/bd_5.wav", rate: rate, amp: 0.75, start: 0.072, finish: 0.9535
+end
+
+define :s6 do
+  #sample "/Users/srothst1/Desktop/bd_3.wav", rate: rate, amp: 0.75, start: 0.013, finish: 0.9425
+  sample "/Users/srothst1/Desktop/bd_6.wav", rate: rate, amp: 0.75, start: 0.01, finish: 0.9535
+end
+
+define :s7 do
+  #sample "/Users/srothst1/Desktop/bd_3.wav", rate: rate, amp: 0.75, start: 0.013, finish: 0.9425
+  sample "/Users/srothst1/Desktop/bd_7.wav", rate: rate, amp: 0.75, start: 0.04, finish: 0.8525
+end
+
+
+
+define :main do
+  ##| drums
+  live_loop :midi_piano do
+    use_real_time
+    note, velocity = sync "/midi:mpk_mini_play:1/note_on"
+    s0 if (note == 20)
+    s1 if (note == 16)
+    s2 if (note == 21)
+    s3 if (note == 17)
+    s4 if (note == 22)
+    s5 if (note == 18)
+    s6 if (note == 23)
+    s7 if (note == 19)
+    keyNote note if (note != 20 and note != 16 and note != 21 and note != 17 and note != 22 and note != 18 and note != 23 and note != 19)
+  end
+end
+
+main
