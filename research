@@ -1,0 +1,339 @@
+bpm = 107.0 #80 #107.0
+use_bpm bpm
+
+sample_bpm = 70.0
+rate = bpm/sample_bpm
+sample_2_bpm = 105.0
+rate_2 = bpm/sample_2_bpm
+sample_3_bpm = 111.0
+rate_3 = bpm/sample_3_bpm
+
+#MIXER:
+global_lpf = 130.0
+global_ixi = 0.0
+global_pan = 0.0
+kicks_amp_1 = 1.0
+
+clap_amp_1 = 0.0
+
+ticks_0_amp_1 = 0.0 * 0.5 #
+ticks_1_amp_1 = 0.0 * 0.6 ##
+ticks_2_amp_2 = 0.0 * 0.6 ## | ###
+
+vs00_amp_0 = 0.0 * 2.0 ##
+vs01_amp_1 = 0.0 * 2.0 ###
+vs02_amp_2 = 0.0 * 2.0
+vs03_amp_3 = 0.0 * 2.0
+
+ms00_amp_0 = 0.0 * 2.0 #
+ms00_amp_0_sleep = 4 #4
+ms01_amp_1 = 0.0 * 2.0 ##
+ms01_amp_1_sleep = 8 #8
+ms02_amp_2 = 0.0 * 2.0
+ms02_amp_2_sleep = 8 #8
+
+ms03_amp_3 = 0.0 * 2.0
+ms04_amp_4 = 0.0 * 2.0 #broken
+ms05_amp_5 = 1.0 * 2.0
+#MIXER^
+
+define :def_settings do
+  kicks_amp_1 = 0.0
+  
+  clap_amp_1 = 0.0
+  
+  ticks_0_amp_1 = 0.0 * 0.5 #
+  ticks_1_amp_1 = 0.0 * 0.6 ##
+  ticks_2_amp_2 = 0.0 * 0.6 ## | ###
+  
+  vs00_amp_0 = 0.0 * 2.0 ##
+  vs01_amp_1 = 0.0 * 2.0 ###
+  vs02_amp_2 = 0.0 * 2.0
+  vs03_amp_3 = 0.0 * 2.0
+  
+  ms00_amp_0 = 0.0 * 2.0 #
+  ms00_amp_0_sleep = 4 #4
+  ms01_amp_1 = 0.0 * 2.0 ##
+  ms01_amp_1_sleep = 8 #8
+  ms02_amp_2 = 0.0 * 2.0
+  ms02_amp_2_sleep = 8 #8
+  
+  ms03_amp_3 = 0.0 * 2.0
+  ms04_amp_4 = 0.0 * 2.0 #broken
+  ms05_amp_5 = 0.0 * 2.0
+end
+
+define :sleep_standard do
+  print "standard"
+  ms00_amp_0_sleep = 4 #4
+  ms01_amp_1_sleep = 8 #8
+  ms02_amp_2_sleep = 8 #8
+end
+
+define :sleep_halved do
+  print "halved"
+  ms00_amp_0_sleep = 2 #4
+  ms01_amp_1_sleep = 4 #8
+  ms02_amp_2_sleep = 4 #8
+end
+
+define :s0 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_0_amp_1 = 1.0 * 0.5 #
+  ms00_amp_0 = 1.0 * 2.0 #
+  ms00_amp_0_sleep = 4 #4
+  vs02_amp_2 = 1.0 * 2.0
+end
+
+define :s1 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_1_amp_1 = 1.0 * 0.6 ##
+  ticks_2_amp_2 = 1.0 * 0.6 ## | ###
+  vs00_amp_0 = 1.0 * 2.0 #
+  ms01_amp_1 = 1.0 * 2.0 ##
+end
+
+define :s2 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_2_amp_2 = 1.0 * 0.6 ## | ###
+  vs01_amp_1 = 1.0 * 2.0 ###
+end
+
+define :s3 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  vs03_amp_3 = 1.0 * 2.0
+end
+
+define :s4 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_1_amp_1 = 1.0 * 0.6 ##
+  ticks_2_amp_2 = 1.0 * 0.6 ## | ###
+  vs02_amp_2 = 1.0 * 2.0
+end
+
+define :s5 do
+  def_settings
+  clap_amp_1 = 1.0
+  ticks_0_amp_1 = 1.0 * 0.5 #
+  vs00_amp_0 = 1.0 * 2.0 ###
+  ms02_amp_2 = 1.0 * 2.0
+end
+
+define :s6 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  vs01_amp_1 = 1.0 * 2.0 ###
+end
+
+define :s7 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_1_amp_1 = 1.0 * 0.6 ##
+  ticks_2_amp_2 = 1.0 * 0.6 ## | ###
+  ms03_amp_3 = 1.0 * 2.0
+end
+
+define :s8 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_1_amp_1 = 1.0 * 0.6 ##
+  ticks_2_amp_2 = 1.0 * 0.6 ## | ###
+  ms04_amp_4 = 1.0 * 2.0 #broken
+end
+
+define :s9 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ticks_1_amp_1 = 1.0 * 0.6 ##
+  ms05_amp_5 = 1.0 * 2.0 #broken
+end
+
+define :main do
+  ##| drums
+  live_loop :midi_piano do
+    use_real_time
+    note, velocity = sync "/midi:mpk_mini_play:1/note_on"
+    print note
+    print global_lpf
+    #KEYS
+    global_lpf = 130 if (note == 60)
+    global_lpf = 100 if (note == 59)
+    global_lpf = 80 if (note == 57)
+    global_ixi = 0.0 if (note == 55)
+    global_ixi = 0.25 if (note == 53)
+    global_ixi = 0.75 if (note == 52)
+    global_pan = 0.0 if (note == 50)
+    global_pan = 1.00 if (note == 48)
+    sleep_standard if (note == 72)
+    sleep_halved if (note == 71)
+    #GREEN
+    s0 if (note == 20)
+    s1 if (note == 16)
+    s2 if (note == 21) #
+    s3 if (note == 17)
+    s4 if (note == 22)
+    s5 if (note == 18)
+    s6 if (note == 23)
+    s7 if (note == 19)
+    #RED
+    s7 if (note == 36)
+    s8 if (note == 32)
+    s9 if (note == 37)
+    #keyNote note if (note != 20 and note != 16 and note != 21 and note != 17 and note != 22 and note != 18 and note != 23 and note != 19)
+  end
+end
+
+main
+
+
+live_loop :kicks do
+  sample :bd_tek, rate: 0.8, amp: 1.5, amp: kicks_amp_1
+  sleep 1
+end
+
+live_loop :clap do
+  sleep 1
+  sample :mehackit_phone1, amp: 1, start: 0.13, finish: 0.35, rate: 0.6, amp: clap_amp_1
+  sleep 2
+  sample :mehackit_phone1, amp: 1, start: 0.13, finish: 0.35, rate: 0.6, amp: clap_amp_1
+  sleep 1
+end
+
+live_loop :ticks_0 do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_0 do
+    sample :drum_cymbal_closed, rate: 0.925, amp: 1.00, amp: ticks_0_amp_1
+    sleep 1
+  end
+end
+
+live_loop :ticks_1 do
+  pan = [-0.2,-0.1,0.0,0.1,0.2].tick
+  sync :kicks
+  live_loop :ticks_inner do
+    sleep 1
+    ##| with_fx :echo, phase: 0.25 do
+    sample :drum_cymbal_closed, rate: 0.925, amp: ticks_1_amp_1, pan: 1.5*pan
+    ##| end
+    sleep 1
+    with_fx :echo, phase: 0.75 do
+      sample :drum_cymbal_closed, rate: 0.925, amp: ticks_1_amp_1, pan: 1.5*pan
+    end
+    sleep 2
+  end
+end
+
+live_loop :ticks_2 do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_2 do
+    with_fx :echo do
+      sample :drum_cymbal_closed, rate: 0.925, amp: 1.00, amp: ticks_2_amp_2
+    end
+    sleep 1
+  end
+end
+
+#vocals:
+live_loop :ms00 do
+  with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+    sample "/Users/srothst1/Desktop/bigwhitecloud_v_0.wav", amp: ms00_amp_0, rate: rate, start: 0.26, finish: 0.45
+  end
+  sleep ms00_amp_0_sleep
+end
+
+live_loop :ms01 do
+  with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+    sample "/Users/srothst1/Desktop/bigwhitecloud_v_0.wav", amp: ms01_amp_1, rate: rate, start: 0.515, finish: 0.97
+  end
+  sleep ms01_amp_1_sleep
+end
+
+live_loop :ms02 do
+  with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+    sample "/Users/srothst1/Desktop/bigwhitecloud_v_2.wav", amp: ms02_amp_2, rate: rate, start: 0.04, finish: 0.55
+  end
+  sleep ms02_amp_2_sleep
+end
+
+
+live_loop :ms03 do
+  sample "/Users/srothst1/Desktop/powerlines_m_0.wav", amp: ms03_amp_3, rate: rate_2, start: 0.04, finish: 0.55
+  sleep 8
+end
+
+live_loop :ms04 do
+  with_fx :echo, phase: 0.5 do
+    with_fx :echo, phase: 2.0 do
+      sample "/Users/srothst1/Desktop/powerlines_m_0.wav", amp: ms04_amp_4, rate: rate_2, start: 0.04, finish: 0.28
+    end
+  end
+  sleep 4
+end
+
+live_loop :ms05 do
+  ##| with_fx :echo, phase: 0.5 do
+  ##| with_fx :echo, phase: 2.0 do
+  sample "/Users/srothst1/Desktop/anewerror_m_0.wav", amp: ms05_amp_5, rate: rate_3, start: 0.02, finish: 0.95
+  ##| end
+  ##| end
+  sleep 32
+end
+
+
+
+
+
+live_loop :vs00 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :panslicer, mix: global_pan, phase: 0.5, pan_max: 0.75, pan_min: -0.75 do
+      sample "/Users/srothst1/Desktop/bigwhitecloud_m_0.wav", amp: vs00_amp_0, rate: rate, start: 0.0775, finish: 0.28 #0.38
+    end
+    sleep 4
+  end
+end
+
+live_loop :vs01 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :panslicer, mix: global_pan, phase: 0.5, pan_max: 0.75, pan_min: -0.75 do
+      sample "/Users/srothst1/Desktop/bigwhitecloud_m_0.wav", amp: vs01_amp_1, rate: rate, start: 0.60, finish: 0.81
+    end
+    sleep 4
+  end
+end
+
+live_loop :vs02 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :panslicer, mix: global_pan, phase: 0.5, pan_max: 0.75, pan_min: -0.75 do
+      sample "/Users/srothst1/Desktop/bigwhitecloud_m_0.wav", amp: vs02_amp_2, rate: rate * 0.5, start: 0.60, finish: 0.81
+    end
+    sleep 8
+  end
+end
+
+live_loop :vs03 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :panslicer, mix: global_pan, phase: 0.5, pan_max: 0.75, pan_min: -0.75 do
+      sample "/Users/srothst1/Desktop/bigwhitecloud_m_0.wav", amp: vs03_amp_3, rate: rate * 0.5, start: 0.60, finish: 0.705
+    end
+    sleep 4
+  end
+end
+
+
+
+
