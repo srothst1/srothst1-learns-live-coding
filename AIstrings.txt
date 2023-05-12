@@ -1,0 +1,205 @@
+## GREEN BOARD
+
+bpm = 110.0 #105.0
+use_bpm bpm
+sample_bpm = 70.0
+rate = bpm/sample_bpm
+sample_2_bpm = 105.0
+rate_2 = bpm/sample_2_bpm
+sample_3_bpm = 110.0
+rate_3 = bpm/sample_3_bpm
+rate_4 = 1.0
+
+if (true)
+  global_lpf = 130.0; global_ixi = 0.0; global_pan = 0.0; kicks_amp_1 = 0.0; clap_amp_1 = 0.0; ticks_0_amp_1 = 0.0 * 0.5; ticks_1_amp_1 = 0.0 * 0.6; ticks_2_amp_2 = 0.0 * 0.6
+  vs00_amp_0 = 0.0; vs01_amp_1 = 0.0; vs02_amp_2 = 0.0; vs03_amp_3 = 0.0; ms03_amp_3 = 0.0; ms03_amp_3_sleep = 8; ms04_amp_4 = 0.0; ms04_amp_4_sleep = 4; ms05_amp_5 = 0.0; ms05_amp_5_sleep = 4; ms06_amp_6 = 0.0; ms06_amp_6_sleep = 4; ms07_amp_7 = 0.0; ms07_amp_7_sleep = 4; ms08_amp_8 = 0.0; ms08_amp_8_sleep = 4; ms09_amp_9 = 0.0; ms09_amp_9_sleep = 4.0; ms10_amp_10 = 0.00; ms10_amp_10_sleep = 4.0; ms11_amp_11 = 0.00; ms11_amp_11_sleep = 4.0; ms12_amp_12 = 0.00; ms12_amp_12_sleep = 2.0; ms13_amp_13 = 0.00; ms13_amp_13_sleep = 2.0; ms14_amp_14 = 0.00; ms14_amp_14_sleep = 2.0; ms15_amp_15 = 0.00; ms15_amp_15_sleep = 2.0
+end
+
+define :def_settings do
+  print "def settings"
+  vs00_amp_0 = 0.0; vs01_amp_1 = 0.0; vs02_amp_2 = 0.0; vs03_amp_3 = 0.0; ms03_amp_3 = 0.0; ms03_amp_3_sleep = 8; ms04_amp_4 = 0.0; ms04_amp_4_sleep = 4; ms05_amp_5 = 0.0; ms05_amp_5_sleep = 4; ms06_amp_6 = 0.0; ms06_amp_6_sleep = 4; ms07_amp_7 = 0.0; ms07_amp_7_sleep = 4; ms08_amp_8 = 0.0; ms08_amp_8_sleep = 4; ms09_amp_9 = 0.0; ms09_amp_9_sleep = 4.0; ms10_amp_10 = 0.00; ms10_amp_10_sleep = 4.0; ms11_amp_11 = 0.00; ms11_amp_11_sleep = 4.0; ms12_amp_12 = 0.00; ms12_amp_12_sleep = 2.0; ms13_amp_13 = 0.00; ms13_amp_13_sleep = 2.0; ms14_amp_14 = 0.00; ms14_amp_14_sleep = 2.0; ms15_amp_15 = 0.00; ms15_amp_15_sleep = 2.0
+end
+
+define :sleep_standard do
+  print "standard"
+  ms03_amp_3_sleep = 8; ms04_amp_4_sleep = 4; ms05_amp_5_sleep = 4; ms06_amp_6_sleep = 4; ms07_amp_7_sleep = 4; ms08_amp_8_sleep = 4; ms09_amp_9_sleep = 4.0; ms10_amp_10_sleep = 4.0; ms11_amp_11_sleep = 4.0; ms12_amp_12_sleep = 2.0; ms13_amp_13_sleep = 2.0; ms14_amp_14_sleep = 2.0; ms15_amp_15_sleep = 2.0
+end
+
+define :sleep_halved do
+  print "halved"
+  ms03_amp_3_sleep = 4; ms04_amp_4_sleep = 2; ms05_amp_5_sleep = 2; ms06_amp_6_sleep = 2; ms07_amp_7_sleep = 2; ms08_amp_8_sleep = 2; ms09_amp_9_sleep = 2; ms10_amp_10_sleep = 2.0; ms11_amp_11_sleep = 2.0; ms12_amp_12_sleep = 1.0; ms13_amp_13_sleep = 1.0; ms14_amp_14_sleep = 1.0; ms15_amp_15_sleep = 1.0
+end
+
+define :forwards do
+  sample_bpm = 70.0
+  rate = bpm/sample_bpm
+  sample_2_bpm = 105.0
+  rate_2 = bpm/sample_2_bpm
+  sample_3_bpm = 110.0
+  rate_3 = bpm/sample_3_bpm
+  rate_4 = 1.0
+end
+
+define :backwards do
+  sample_bpm = 70.0
+  rate = -1.0 * bpm/sample_bpm
+  sample_2_bpm = 105.0
+  rate_2 = -1.0 * bpm/sample_2_bpm
+  sample_3_bpm = 110.0
+  rate_3 = -1.0 * bpm/sample_3_bpm
+  rate_4 = -1.0
+end
+
+define :main do
+  live_loop :midi_piano do
+    use_real_time
+    note, velocity = sync "/midi:mpk_mini_play:1/note_on"
+    print note
+    #KEYS
+    ##| global_lpf = 130 if (note == 60)
+    ##| global_lpf = 100 if (note == 59)
+    ##| global_lpf = 80 if (note == 57)
+    ##| global_ixi = 0.0 if (note == 55)
+    ##| global_ixi = 0.25 if (note == 53)
+    ##| global_ixi = 0.75 if (note == 52)
+    ##| global_pan = 0.0 if (note == 50)
+    ##| global_pan = 1.00 if (note == 48)
+    if (note == 48)
+      kicks_amp_1 = 0.0; clap_amp_1 = 0.0; ticks_0_amp_1 = 0.0; ticks_1_amp_1 = 0.0; ticks_2_amp_2 = 0.0
+    end
+    if (note == 49)
+      kicks_amp_1 = 0.0; clap_amp_1 = 0.0; ticks_0_amp_1 = 0.0; ticks_1_amp_1 = 0.0; ticks_2_amp_2 = 0.25
+    end
+    if (note == 50)
+      kicks_amp_1 = 0.5; clap_amp_1 = 0.25; ticks_0_amp_1 = 0.5; ticks_1_amp_1 = 0.0; ticks_2_amp_2 = 0.0
+    end
+    if (note == 51)
+      kicks_amp_1 = 0.5; clap_amp_1 = 0.25; ticks_0_amp_1 = 0.0; ticks_1_amp_1 = 0.0; ticks_2_amp_2 = 0.5
+    end
+    if (note == 52)
+      kicks_amp_1 = 0.5; clap_amp_1 = 0.25; ticks_0_amp_1 = 0.0; ticks_1_amp_1 = 0.5; ticks_2_amp_2 = 0.5
+    end
+    
+    sleep_standard if (note == 72)
+    sleep_halved if (note == 71)
+    forwards if (note == 68)
+    backwards if (note == 66)
+    
+    #clear channels button
+    def_settings if (note == 70)
+    
+    #GREEN
+    ms10_amp_10 = 0.75 if (note == 20)
+    ms11_amp_11 = 0.75 if (note == 16)
+    ms12_amp_12 = 0.5 if (note == 21)
+    ms13_amp_13 = 0.5 if (note == 17)
+    ms14_amp_14 = 0.5 if (note == 22)
+    ms15_amp_15 = 0.5 if (note == 18)
+    ##| s6 if (note == 23)
+    ##| s7 if (note == 19)
+  end
+end
+
+main
+
+live_loop :kicks do
+  sample :bd_tek, rate: 0.8, amp: 1.5, amp: kicks_amp_1
+  sleep 1
+end
+live_loop :clap do
+  sleep 1
+  sample :mehackit_phone1, amp: 1, start: 0.13, finish: 0.35, rate: 0.6, amp: clap_amp_1
+  sleep 2
+  sample :mehackit_phone1, amp: 1, start: 0.13, finish: 0.35, rate: 0.6, amp: clap_amp_1
+  sleep 1
+end
+live_loop :ticks_0 do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_0 do
+    sample :drum_cymbal_closed, rate: 0.925, amp: 1.00, amp: ticks_0_amp_1
+    sleep 1
+  end
+end
+live_loop :ticks_1 do
+  pan = [-0.2,-0.1,0.0,0.1,0.2].tick
+  sync :kicks
+  live_loop :ticks_inner do
+    sleep 1
+    sample :drum_cymbal_closed, rate: 0.925, amp: ticks_1_amp_1, pan: 1.5*pan
+    sleep 1
+    with_fx :echo, phase: 0.75 do
+      sample :drum_cymbal_closed, rate: 0.925, amp: ticks_1_amp_1, pan: 1.5*pan
+    end
+    sleep 2
+  end
+end
+live_loop :ticks_2 do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_2 do
+    with_fx :echo do
+      sample :drum_cymbal_closed, rate: 0.925, amp: 1.00, amp: ticks_2_amp_2
+    end
+    sleep 1
+  end
+end
+
+live_loop :ms10 do
+  2.times do
+    with_fx :echo, phase: 0.75 do
+      with_fx :echo, phase: 0.75 do
+        sample "/Users/srothst1/Desktop/aistrings_m_0.wav", amp: ms10_amp_10, rate: rate_4, start: 0.03, finish: 0.08
+      end
+      sleep ms10_amp_10_sleep / 2
+      with_fx :echo, phase: 0.25 do
+        sample "/Users/srothst1/Desktop/aistrings_m_0.wav", amp: ms10_amp_10, rate: rate_4, start: 0.03, finish: 0.08
+      end
+    end
+    sleep ms10_amp_10_sleep / 2
+  end
+end
+live_loop :ms11 do
+  2.times do
+    with_fx :echo, phase: 0.75 do
+      with_fx :echo, phase: 0.75 do
+        sample "/Users/srothst1/Desktop/aistrings_m_0.wav", amp: ms11_amp_11, rate: rate_4, start: 0.90, finish: 0.95
+      end
+      sleep ms11_amp_11_sleep / 2
+      with_fx :echo, phase: 0.25 do
+        sample "/Users/srothst1/Desktop/aistrings_m_0.wav", amp: ms11_amp_11, rate: rate_4, start: 0.90, finish: 0.95 #start: 0.10, finish: 0.15
+      end
+    end
+    sleep ms11_amp_11_sleep / 2
+  end
+end
+live_loop :ms12 do
+  8.times do
+    sample "/Users/srothst1/Desktop/aistrings_m_0.wav", amp: ms12_amp_12, rate: rate_4, start: 0.03, finish: 0.08
+    sleep ms12_amp_12_sleep / 4
+  end
+end
+live_loop :ms13 do
+  8.times do
+    sample "/Users/srothst1/Desktop/aistrings_m_0.wav", amp: ms13_amp_13, rate: rate_4, start: 0.90, finish: 0.95
+    sleep ms13_amp_13_sleep / 4
+  end
+end
+live_loop :ms14 do
+  4.times do
+    sleep ms14_amp_14_sleep / 2
+    with_fx :ixi_techno, phase: 4.0 do
+      sample "/Users/srothst1/Desktop/aistrings_m_0.wav", amp: ms14_amp_14, rate: rate_4, start: 0.03, finish: 0.08
+    end
+    sleep ms14_amp_14_sleep / 2
+  end
+end
+live_loop :ms15 do
+  4.times do
+    sleep ms15_amp_15_sleep / 2
+    with_fx :ixi_techno, phase: 4.0 do
+      sample "/Users/srothst1/Desktop/aistrings_m_0.wav", amp: ms15_amp_15, rate: rate_4, start: 0.90, finish: 0.95
+    end
+    sleep ms15_amp_15_sleep / 2
+  end
+end
