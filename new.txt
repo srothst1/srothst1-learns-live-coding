@@ -1,0 +1,164 @@
+use_bpm 120
+
+# Mixer:
+master = (ramp *range(0, 1, 0.01))
+kick_volume = 0.0
+bass_volume = 0.0
+revbass_volume = 1
+snare_volume = 0.0
+hats_volume = 0.0
+open_hats_volume = 0.0
+synth_volume = 1
+pad_volume = 1
+beep_volume = 0.5
+
+kick_cutoffs = range(50, 80, 0.5).mirror # A LFO for the poor
+define :snare do |amp|
+  sample :sn_dolf, amp: amp, start: 0.15, finish: 0.35, rate: 0.7
+end
+bassline_rhythm = (ring 1, 0, 0, 0, 1, 0, 0, 0,
+                   1, 0, 0.5, 0, 1, 0, 0.5, 0)
+bassline_notes = (stretch [:d1] * 12 + [:f1, :f1, :a1, :f1], 8)
+#dchord = chord(:d3, :major, num_octaves: 3)
+dchord = chord(:e3, :minor, num_octaves: 3)
+synth_cutoffs = range(60, 100, 0.5).mirror
+synth_rhythm = (ring 2.0, 2.0, 1)
+synth_transpositions = (stretch 0, 36) + (stretch -12, 6) + (stretch 12, 6)
+synth_phases = (stretch 0.75, 15) + [2.5]
+synth_pans = (ring -0.5, 0.5)
+
+define :drums do
+  live_loop :kick do
+    if (spread 1, 4).tick then # 4-on-the-floor
+      sample :bd_tek, amp: master.look * kick_volume,
+        cutoff: kick_cutoffs.look
+    end
+    sleep 0.25
+  end
+  
+  live_loop :snares do
+    sleep 1
+    snare 1 * master.tick * snare_volume
+    sleep 1
+  end
+end
+
+
+define :brightShuffleOG do
+  with_fx :reverb, mix: 0.7 do
+    live_loop :arpShuffle, sync: :kick do
+      with_fx :echo, phase: 0.25, mix: 0.15  do #1.0 do
+        with_fx :compressor, threshold: 0.25, clamp_time: 0.01, slope_above: 0.4, relax_time: 0.01 do
+          r = 1.10
+          c = [80, 82.5, 85, 87.5, 90, 95, 100, 105]
+          p = 0
+          at = 0.05
+          use_synth :supersaw
+          tick
+          
+          #9A
+          dropninea_simple = [58, 61, 65, 63, 58, 61, 65, 63]
+          dropninea_simple_sleeps = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+          dropninea_simple_cutoffs = [100, 95, 80, 70, 90, 90, 80, 70]
+          
+          dropninea = [58, 61, 65, 63, 58, 61, 63, 65]
+          dropninea_sleeps = [0.5, 0.5, 0.5, 0.5, 0.75, 0.25, 0.5, 0.5]
+          dropninea_cutoffs = [115, 110, 110, 95, 85, 80, 75, 70]
+          
+          #9A
+          dropninea_2 = [58, 61, 65, 61, 58, 61, 65, 58]
+          dropninea_2_sleeps = [0.5, 0.5, 0.5, 0.5, 0.75, 0.25, 0.5, 0.5]
+          dropninea_2_cutoffs = [115, 110, 105, 100, 95, 90, 85, 80]
+          
+          #9A
+          dropninea_3 = dropninea_simple*2 + dropninea * 2 + dropninea_2 * 2
+          dropninea_3_sleeps = dropninea_simple_sleeps*2 + dropninea_sleeps * 2 + dropninea_2_sleeps * 2
+          dropninea_3_cutoffs = dropninea_simple_cutoffs*2 + dropninea_cutoffs * 2 + dropninea_2_cutoffs * 2
+          
+          #8A
+          dropeighta_simple = [56, 59, 63, 61, 56, 59, 63, 61]
+          dropeighta_simple_sleeps = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+          dropeighta_simple_cutoffs = [100, 95, 80, 70, 90, 90, 80, 70]
+          
+          dropeighta = [56, 59, 63, 61, 56, 59, 61, 63]
+          dropeighta_sleeps = [0.5, 0.5, 0.5, 0.5, 0.75, 0.25, 0.5, 0.5]
+          dropeighta_cutoffs = [115, 110, 110, 95, 85, 80, 75, 70]
+          
+          #8A
+          dropeighta_2 = [56, 59, 63, 59, 56, 59, 63, 56]
+          dropeighta_2_sleeps = [0.5, 0.5, 0.5, 0.5, 0.75, 0.25, 0.5, 0.5]
+          dropeighta_2_cutoffs = [115, 110, 105, 100, 95, 90, 85, 80]
+          
+          #8A
+          dropeighta_3 = dropeighta_simple*2 + dropeighta * 2 + dropeighta_2 * 2
+          dropeighta_3_sleeps = dropeighta_simple_sleeps*2 + dropeighta_sleeps * 2 + dropeighta_2_sleeps * 2
+          dropeighta_3_cutoffs = dropeighta_simple_cutoffs*2 + dropeighta_cutoffs * 2 + dropeighta_2_cutoffs * 2
+          
+          #7A
+          dropsevena_simple = [55, 58, 62, 60, 55, 58, 62, 60]
+          dropsevena_simple_sleeps = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+          dropsevena_simple_cutoffs = [100, 95, 80, 70, 90, 90, 80, 70]
+          
+          dropsevena = [55, 58, 62, 60, 55, 58, 60, 62]
+          dropsevena_sleeps = [0.5, 0.5, 0.5, 0.5, 0.75, 0.25, 0.5, 0.5]
+          dropsevena_cutoffs = [115, 110, 110, 95, 85, 80, 75, 70]
+          
+          #7A
+          dropsevena_2 = [55, 58, 62, 58, 55, 58, 62, 55]
+          dropsevena_2_sleeps = [0.5, 0.5, 0.5, 0.5, 0.75, 0.25, 0.5, 0.5]
+          dropsevena_2_cutoffs = [115, 110, 105, 100, 95, 90, 85, 80]
+          
+          #7A
+          dropsevena_3 = dropsevena_simple*2 + dropsevena * 2 + dropsevena_2 * 2
+          dropsevena_3_sleeps = dropsevena_simple_sleeps*2 + dropsevena_sleeps * 2 + dropsevena_2_sleeps * 2
+          dropsevena_3_cutoffs = dropsevena_simple_cutoffs*2 + dropsevena_cutoffs * 2 + dropsevena_2_cutoffs * 2
+          
+          #7A test
+          t_dropsevena_shuffle = [55, 62, 60, 58, 62, 55, 58, 60]
+          t_dropsevena_shuffle_sleeps = [0.25, 0.75, 0.5, 0.25, 0.5, 0.5, 0.75, 0.25]
+          t_dropsevena_shuffle_cutoffs = [100, 90, 80, 110, 70, 90, 85, 70]
+          
+          t_dropsevena_dynamic = [55, 58, 62, 60, 62, 55, 60, 58]
+          t_dropsevena_dynamic_sleeps = [0.5, 0.25, 0.5, 0.75, 0.25, 0.5, 0.75, 0.5]
+          t_dropsevena_dynamic_cutoffs = [115, 110, 95, 85, 110, 80, 75, 70]
+          
+          #7A test
+          t_dropsevena_shuffled = [58, 62, 55, 60, 58, 55, 62, 58]
+          t_dropsevena_shuffled_sleeps = [0.75, 0.5, 0.5, 0.25, 0.5, 0.75, 0.25, 0.5]
+          t_dropsevena_shuffled_cutoffs = [110, 105, 100, 90, 95, 85, 80, 70]
+          
+          #7A test
+          t_dropsevena_shuffle_3 = t_dropsevena_shuffle * 2 + t_dropsevena_dynamic * 2 + t_dropsevena_shuffled * 2
+          t_dropsevena_shuffle_3_sleeps = t_dropsevena_shuffle_sleeps * 2 + t_dropsevena_dynamic_sleeps * 2 + t_dropsevena_shuffled_sleeps * 2
+          t_dropsevena_shuffle_3_cutoffs = t_dropsevena_shuffle_cutoffs * 2 + t_dropsevena_dynamic_cutoffs * 2 + t_dropsevena_shuffled_cutoffs * 2
+          
+          a = 0.0
+          notes = t_dropsevena_shuffled
+          sleep t_dropsevena_shuffled_sleeps.look
+          c = t_dropsevena_shuffled_cutoffs.look
+          p = [-0.35, -0.25, -0.15, -0.05, 0.05, 0.15, 0.25, 0.35].look
+          
+          play notes.look, amp: a, release: r, cutoff: c, pan: p, attack: at
+        end
+      end
+    end
+  end
+end
+
+#7A
+bassline = [55, 55, 60, 55, 64, 55, 60, 55]
+bassline_sleeps = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+
+live_loop :bass, sync: :kick do
+  use_synth :saw
+  
+  bassline.each_with_index do |note, i|
+    with_fx :ixi_techno, cutoff_min: 60, cutoff_max: 105, phase: 1.0, res: 0.5 do
+      play note, release: 0.40, amp: 0.0
+      sleep bassline_sleeps[i] * 1.0
+    end
+  end
+end
+
+drums
+brightShuffleOG
