@@ -1,0 +1,428 @@
+bpm = 120.0 #80 #107.0
+use_bpm bpm
+
+sample_bpm = 70.0
+rate = bpm/sample_bpm
+sample_2_bpm = 105.0
+rate_2 = bpm/sample_2_bpm
+sample_3_bpm = 110.0
+rate_3 = bpm/sample_3_bpm
+
+#MIXER:
+global_lpf = 130.0
+global_ixi = 0.0
+global_pan = 0.0
+
+kicks_amp_1 = 0.0
+
+clap_amp_1 = 0.0
+
+ticks_0_amp_1 = 0.0 * 0.5 #
+ticks_1_amp_1 = 0.0 * 0.6
+
+ms00_amp_0 = 0.0
+ms00_amp_0_sleep = 16
+
+ms01_amp_1 = 0.0
+ms01_amp_1_sleep = 16
+
+ms02_amp_2 = 0.0
+ms02_amp_2_sleep = 16
+
+ms03_amp_3 = 0.0
+ms03_amp_3_sleep = 16
+
+ms04_amp_4 = 0.0
+ms04_amp_4_sleep = 16
+
+ms05_amp_5 = 0.0
+ms05_amp_5_sleep = 16
+
+ms06_amp_6 = 0.0
+ms06_amp_6_sleep = 16
+
+ms07_amp_7 = 0.0
+ms07_amp_7_sleep = 16
+
+ms071_amp_71 = 0.0
+ms071_amp_71_sleep = 16
+
+ms08_amp_8 = 0.0
+ms08_amp_8_sleep = 16
+
+ms09_amp_9 = 0.0 #
+ms09_amp_9_sleep = 16#16 -> 4
+
+ms10_amp_10 = 0.0
+ms10_amp_10_sleep = 16
+
+ms11_amp_11 = 0.0
+ms11_amp_11_sleep = 16
+
+##| MIXER^
+
+define :def_settings do
+  kicks_amp_1 = 0.0
+  clap_amp_1 = 0.0
+  
+  ticks_0_amp_1 = 0.0 * 0.5 #
+  ticks_1_amp_1 = 0.0 * 0.6
+  
+  ms00_amp_0 = 0.0
+  ms00_amp_0_sleep = 16
+  
+  ms01_amp_1 = 0.0
+  ms01_amp_1_sleep = 16
+  
+  ms02_amp_2 = 0.0
+  ms02_amp_2_sleep = 16
+  
+  ms03_amp_3 = 0.0
+  ms03_amp_3_sleep = 16
+  
+  ms04_amp_4 = 0.0
+  ms04_amp_4_sleep = 16
+  
+  ms05_amp_5 = 0.0
+  ms05_amp_5_sleep = 16
+  
+  ms06_amp_6 = 0.0
+  ms06_amp_6_sleep = 16
+  
+  ms07_amp_7 = 0.0
+  ms07_amp_7_sleep = 16
+  
+  ms071_amp_71 = 0.0
+  ms071_amp_71_sleep = 16
+  
+  ms08_amp_8 = 0.0
+  ms08_amp_8_sleep = 16
+  
+  ms09_amp_9 = 0.0 #
+  ms09_amp_9_sleep = 16#16 -> 4
+  
+  ms10_amp_10 = 0.0
+  ms10_amp_10_sleep = 16
+  
+  ms11_amp_11 = 0.0
+  ms11_amp_11_sleep = 16
+end
+
+define :sleep_standard do
+  print "standard"
+  
+end
+
+define :sleep_halved do
+  print "halved"
+  
+end
+
+define :s0 do
+  def_settings
+  ticks_0_amp_1 = 1.0 * 0.5 #
+  ms09_amp_9 = 6.0 #
+  ms09_amp_9_sleep = 16 #16 -> 4
+end
+
+define :s1 do
+  def_settings
+  global_lpf = 90
+  global_ixi = 0.25
+  kicks_amp_1 = 1.0
+  ticks_0_amp_1 = 1.0 * 0.5 #
+  ms00_amp_0 = 1.0
+  ms09_amp_9 = 6.0 #
+  ms09_amp_9_sleep = 16#16 -> 4
+end
+
+define :s2 do
+  def_settings
+  global_lpf = 80
+  global_ixi = 0.25
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_0_amp_1 = 1.0 * 0.5 #
+  ms01_amp_1 = 1.0
+  ms09_amp_9 = 3.0 #
+  ms09_amp_9_sleep = 16#16 -> 4
+end
+
+define :s3 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_0_amp_1 = 1.0 * 0.5 #
+  ms01_amp_1 = 1.0
+  ms09_amp_9 = 3.2
+  ms09_amp_9_sleep = 16
+end
+
+define :s4 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ms02_amp_2 = 1.0
+end
+
+define :s5 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_1_amp_1 = 1.0 * 0.6
+  ms03_amp_3 = 1.0
+end
+
+define :s6 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ms03_amp_3 = 0.3
+  ms04_amp_4 = 1.0
+end
+
+define :s7 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ms05_amp_5 = 1.0
+end
+
+define :s8 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ms06_amp_6 = 1.0
+end
+
+define :s9 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ms07_amp_7 = 1.0
+end
+
+define :s10 do
+  def_settings
+  ticks_1_amp_1 = 1.0 * 0.6
+  ms071_amp_71 = 0.8
+end
+
+define :s11 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ms03_amp_3 = 1.0
+end
+
+define :s12 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ms09_amp_9 = 1.2
+end
+
+define :s13 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ms11_amp_11 = 1.0
+end
+
+define :s14 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ms07_amp_7 = 1.0
+end
+
+define :s15 do
+  def_settings
+  kicks_amp_1 = 1.0
+  ticks_1_amp_1 = 1.0 * 0.6
+  ms10_amp_10 = 1.0
+end
+
+define :s16 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_0_amp_1 = 1.0 * 0.5 #
+  ms03_amp_3 = 1.0
+end
+
+define :s17 do
+  def_settings
+  kicks_amp_1 = 1.0
+  clap_amp_1 = 1.0
+  ticks_0_amp_1 = 1.0 * 0.5 #
+  ms01_amp_1 = 1.0
+  ms09_amp_9 = 3.0 #
+  ms09_amp_9_sleep = 16#16 -> 4
+end
+
+define :s18 do
+  def_settings
+  ticks_0_amp_1 = 1.0 * 0.5
+  ms09_amp_9 = 3.0
+  ms09_amp_9_sleep = 16
+end
+
+
+##| global_lpf = 130
+##| global_lpf = 100
+##| global_lpf = 80
+##| global_ixi = 0.0
+##| global_ixi = 0.05
+##| global_ixi = 0.25
+##| global_pan = 0.0
+##| global_pan = 1.00
+##| sleep_standard if (false)
+##| sleep_halved if (false)
+
+#can switch between 14 and 15 a few times if you want
+s18
+
+live_loop :kicks do
+  sample :bd_tek, rate: 0.8, amp: 1.5, amp: kicks_amp_1
+  sleep 1
+end
+
+live_loop :clap do
+  sleep 1
+  sample :mehackit_phone1, amp: 1, start: 0.13, finish: 0.28, rate: 0.6, amp: clap_amp_1
+  sleep 2
+  sample :mehackit_phone1, amp: 1, start: 0.13, finish: 0.28, rate: 0.6, amp: clap_amp_1
+  sleep 1
+end
+
+live_loop :ticks_0 do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_0 do
+    sample :drum_cymbal_closed, rate: 0.925, amp: 1.00, amp: ticks_0_amp_1
+    sleep 1
+  end
+end
+
+live_loop :ticks_1 do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_1 do
+    with_fx :echo do
+      sample :drum_cymbal_closed, rate: 0.925, amp: 1.00, amp: ticks_1_amp_1
+    end
+    sleep 1
+  end
+end
+
+
+live_loop :ms00 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_0.wav", amp: ms00_amp_0, rate: 1.0, start: 0.0, finish: 0.985
+    end
+  end
+  sleep ms00_amp_0_sleep
+end
+
+live_loop :ms01 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_1.wav", amp: ms01_amp_1, rate: 1.0, start: 0.0, finish: 0.985
+    end
+  end
+  sleep ms01_amp_1_sleep
+end
+
+live_loop :ms02 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_2.wav", amp: ms02_amp_2, rate: 1.0, start: 0.0045, finish: 0.985
+    end
+  end
+  sleep ms02_amp_2_sleep
+end
+
+live_loop :ms03 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_3.wav", amp: ms03_amp_3, rate: 1.0, start: 0.006, finish: 0.985
+    end
+  end
+  sleep ms03_amp_3_sleep
+end
+
+live_loop :ms04 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_4.wav", amp: ms04_amp_4, rate: 1.0, start: 0.009, finish: 0.985
+    end
+  end
+  sleep ms04_amp_4_sleep
+end
+
+live_loop :ms05 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_5.wav", amp: ms05_amp_5, rate: 1.0, start: 0.006, finish: 0.985
+    end
+  end
+  sleep ms05_amp_5_sleep
+end
+
+live_loop :ms06 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_6.wav", amp: ms06_amp_6, rate: 1.0, start: 0.007, finish: 0.985
+    end
+  end
+  sleep ms06_amp_6_sleep
+end
+
+live_loop :ms07 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_7.wav", amp: ms07_amp_7, rate: 1.0, start: 0.0066, finish: 0.985
+    end
+  end
+  sleep ms07_amp_7_sleep
+end
+
+live_loop :ms071 do
+  with_fx :echo, phase: 8.0 do
+    with_fx :lpf, cutoff: global_lpf do
+      with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+        sample "/Users/srothst1/Desktop/bhm_7.wav", amp: ms071_amp_71, rate: 1.0, start: 0.0066, finish: 0.985
+      end
+    end
+  end
+  sleep ms071_amp_71_sleep
+end
+
+live_loop :ms08 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_8.wav", amp: ms08_amp_8, rate: 1.0, start: 0.005, finish: 0.985
+    end
+  end
+  sleep ms08_amp_8_sleep
+end
+
+live_loop :ms09 do
+  
+  sample "/Users/srothst1/Desktop/bhm_9.wav", amp: ms09_amp_9, rate: 1.0, start: 0.006, finish: 0.985
+  
+  sleep ms09_amp_9_sleep
+end
+
+live_loop :ms10 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_10.wav", amp: ms10_amp_10, rate: 1.0, start: 0.007, finish: 0.985
+    end
+  end
+  sleep ms10_amp_10_sleep
+end
+
+live_loop :ms11 do
+  with_fx :lpf, cutoff: global_lpf do
+    with_fx :ixi_techno, mix: global_ixi, phase: 8.0 do
+      sample "/Users/srothst1/Desktop/bhm_11.wav", amp: ms11_amp_11, rate: 1.0, start: 0.0055, finish: 0.985
+    end
+  end
+  sleep ms11_amp_11_sleep
+end
