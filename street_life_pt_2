@@ -1,0 +1,206 @@
+define :arpeggiator do |root, options={}|
+  options[:num_octaves] ||= 1
+  options[:direction] ||= :up
+  options[:transpose] ||= nil
+  options[:grouping] ||= 0
+  
+  options[:chord] ||= :major
+  options[:scale] ||= nil
+  options[:notes] ||= nil
+  
+  if options[:notes]
+    # TODO: num_octaves for arbitrary notes
+    note_pool = Array(options[:notes]).ring
+  elsif options[:scale]
+    note_pool = scale(root, options[:scale], num_octaves: options[:num_octaves])
+  else
+    note_pool = options[:num_octaves].times.flat_map do |n|
+      chord(root, options[:chord]).map {|x| x + (n * 12) }
+    end
+  end
+  
+  # safety net
+  note_pool = Array(root) if note_pool.empty?
+  
+  # Make array for following transformations
+  note_pool = note_pool.to_a
+  
+  note_pool = case options[:direction]
+  when :up
+    note_pool.sort
+  when :down
+    note_pool.sort.reverse
+  when :updown
+    note_pool.sort + note_pool.sort.reverse[1..-1]
+  when :downup
+    note_pool.sort.reverse + note_pool.sort[1..-1]
+  when :random
+    note_pool.shuffle
+  when :from_notes
+    note_pool
+  end
+  
+  note_pool = if options[:grouping] != 0
+    # TODO stop this crashing if grouping > note_pool.length
+    note_pool.each_cons(options[:grouping]).to_a.flatten
+  else
+    note_pool
+  end
+  
+  (ring *note_pool)
+end
+
+midi_all_notes_off
+
+
+bpm = 120.0
+use_bpm bpm
+
+sample_bpm = 130.0
+rate = bpm/sample_bpm
+
+#vocals:
+live_loop :vs00 do
+  a = 0.0
+  lpf = 100
+  with_fx :lpf, cutoff: lpf do
+    sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.89, finish: 0.990 #0.055
+  end
+  sleep 4
+end
+
+live_loop :vs01 do
+  a = 0.00
+  lpf = 100
+  with_fx :lpf, cutoff: lpf do
+    sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.06, finish: 0.30 #0.055
+    sleep 8
+    sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.33, finish: 0.60 #0.055
+    sleep 10
+    sample "/Users/srothst1/Desktop/street_v_0.wav", amp: a, rate: rate, start: 0.715, finish: 0.990 #0.055
+    sleep 12
+  end
+end
+
+#old synth
+live_loop :arp_b_0 do
+  midi arpeggiator(:c3, num_octaves: 0, chord: :m), channel: 10, port: "iac_driver_bus_1"
+  sleep 0.5
+end
+
+live_loop :arp_b_1 do
+  16.times do
+    midi arpeggiator(:c2, num_octaves: 0, chord: :m), channel: 11, port: "iac_driver_bus_1"
+    sleep 0.25
+    midi arpeggiator(:c2, num_octaves: 1, chord: :m).tick, channel: 11, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+  16.times do
+    midi arpeggiator(:c2, num_octaves: 0, chord: :m), channel: 11, port: "iac_driver_bus_1"
+    sleep 0.25
+    midi arpeggiator(:c3, num_octaves: 1, chord: :m).tick, channel: 11, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+  16.times do
+    midi arpeggiator(:c2, num_octaves: 0, chord: :m), channel: 11, port: "iac_driver_bus_1"
+    sleep 0.25
+    midi arpeggiator(:c4, num_octaves: 1, chord: :m).tick, channel: 11, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+  16.times do
+    midi arpeggiator(:c2, num_octaves: 0, chord: :m), channel: 11, port: "iac_driver_bus_1"
+    sleep 0.25
+    midi arpeggiator(:c3, num_octaves: 1, chord: :m).tick, channel: 11, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+end
+
+live_loop :arp_b_2 do
+  16.times do
+    midi [58, 55, 51, 55, 51, 48, 51, 51].tick + 12, channel: 12, port: "iac_driver_bus_1"
+    sleep 0.25
+  end
+  16.times do
+    sleep 0.25
+  end
+end
+
+live_loop :kicks do
+  midi 46, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 1
+  midi 46, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 1
+  midi 46, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 1
+  midi 46, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 0.5
+  midi 46, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 0.5
+end
+
+live_loop :clap do
+  sleep 1
+  midi 36, release: 1.0, channel: 2, port: "iac_driver_bus_1"
+  sleep 2
+  midi 39, release: 1.0, channel: 2, port: "iac_driver_bus_1"
+  sleep 1
+  sleep 1
+  midi 43, release: 1.0, channel: 2, port: "iac_driver_bus_1"
+  sleep 2
+  midi 46, release: 1.0, channel: 2, port: "iac_driver_bus_1"
+  sleep 1
+end
+
+live_loop :tick do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_0 do
+    midi 36, release: 1.0, channel: 3, port: "iac_driver_bus_1"
+    sleep 1
+  end
+end
+
+live_loop :arp do
+  x = [36,39,43,46,36,39,43,46,36,39,43,46,36,39,46,43].tick
+  midi x, channel: 4, port: "iac_driver_bus_1"
+  sleep 0.5
+end
+
+live_loop :ar2 do
+  x = 58
+  midi x, sustain: 1.0, channel: 5, port: "iac_driver_bus_1"
+  sleep 4.0
+end
+
+live_loop :arp3 do
+  # x = arpeggiator(:c2, num_octaves: 1, chord: :m7).tick
+  x = [36,39,43,46,36,39,43,46,36,39,43,46,36,39,46,43,36,39,46,43].tick
+  midi x, channel: 6, port: "iac_driver_bus_1"
+  sleep [3.0, 0.5, 0.5].look
+end
+
+live_loop :arp4 do
+  x = arpeggiator(:c3, num_octaves: 1, chord: :m7, direction: :up).tick
+  midi x, channel: 7, port: "iac_driver_bus_1"
+  sleep [0.25].look
+end
+
+live_loop :arp5 do
+  # x = arpeggiator(:c2, num_octaves: 1, chord: :m7).tick
+  x = [46, 43, 39, 43, 39, 36, 39, 46].tick
+  midi x, channel: 8, port: "iac_driver_bus_1"
+  sleep [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 5.0].look
+end
+
+live_loop :arp6 do
+  # x = arpeggiator(:c2, num_octaves: 1, chord: :m7).tick
+  x = [46, 43, 39, 46, 43, 39,46, 46, 43, 39, 43, 39].tick
+  midi x, channel: 9, port: "iac_driver_bus_1"
+  sleep [1.0, 0.5, 0.5].look
+end
+
+
+##| live_loop :ar2 do
+##|   midi arpeggiator(:c4, num_octaves: 3, scale: :minor_pentatonic, direction: :down, grouping: 4).tick, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+##|   sleep 0.0625
+##| end
