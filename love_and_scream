@@ -1,0 +1,205 @@
+bpm = 120.0
+use_bpm bpm
+
+sample_bpm = 120.0
+rate = bpm/sample_bpm
+
+#vocals:
+live_loop :vs00 do
+  a = 0.0 * 2.0
+  lpf = 85
+  with_fx :lpf, cutoff: lpf do
+    sample "/Users/srothst1/Desktop/aal_0_s.wav", amp: a, rate: -1.0 * rate, start: 0.07, finish: 0.975
+  end
+  sleep 8
+end
+
+live_loop :vs01 do
+  a = 0.0 * 4.0
+  lpf = 80
+  with_fx :lpf, cutoff: lpf do
+    sample "/Users/srothst1/Desktop/aal_0_s.wav", amp: a, rate: rate, start: 0.07, finish: 0.975
+  end
+  sleep 8
+end
+
+live_loop :vs02 do
+  a = 0.0 * 2.0
+  lpf = 90
+  with_fx :lpf, cutoff: lpf do
+    sample "/Users/srothst1/Desktop/aal_2_s.wav", amp: a, rate: rate, start: 0.00, finish: 1.00
+  end
+  sleep 16
+end
+
+#Drums
+live_loop :kicks do
+  note = 38
+  midi note, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 1
+  midi note, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 1
+  midi note, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 1
+  midi note, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 0.5
+  midi note, release: 1.0, channel: 1, port: "iac_driver_bus_1"
+  sleep 0.5
+end
+
+live_loop :kicks2 do
+  sleep 3.5
+  midi 36, release: 1.0, channel: 2, port: "iac_driver_bus_1"
+  sleep 0.5
+end
+
+live_loop :ticks_inner_0 do
+  2.times do
+    midi 33, release: 1.0, channel: 3, port: "iac_driver_bus_1"
+    sleep 0.25
+  end
+  7.times do
+    midi 38, release: 1.0, channel: 3, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+end
+
+live_loop :clap do
+  sleep 1
+  midi 38, release: 1.0, channel: 4, port: "iac_driver_bus_1"
+  sleep 2
+  midi 38, release: 1.0, channel: 4, port: "iac_driver_bus_1"
+  sleep 1
+end
+
+live_loop :tick do
+  sync :kicks
+  sleep 0.5
+  live_loop :ticks_inner_1 do
+    midi 38, release: 1.0, channel: 7, port: "iac_driver_bus_1"
+    sleep 1
+  end
+end
+
+#Synths
+
+live_loop :arp3 do
+  6.times do
+    x = [62, 67, 65, 60].tick
+    midi x, channel: 9, port: "iac_driver_bus_1"
+    sleep [0.5].look
+  end
+  
+  4.times do
+    x = [57, 53, 58, 62].tick
+    midi x, channel: 9, port: "iac_driver_bus_1"
+    sleep [0.25].look
+  end
+end
+
+live_loop :arp2 do
+  timesnum = 4
+  sleep 1
+  timesnum.times do
+    x = [62, 57].tick
+    midi x, channel: 8, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+  sleep 1
+  timesnum.times do
+    x = [65, 62].tick
+    midi x, channel: 8, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+end
+
+live_loop :arp1 do
+  12.times do
+    x = [62, 65, 62, 57].tick
+    midi x, channel: 6, port: "iac_driver_bus_1"
+    sleep [0.25].look
+  end
+  4.times do
+    x = [57, 53, 60, 62].tick
+    midi x, channel: 6, port: "iac_driver_bus_1"
+    sleep [0.25].look
+  end
+end
+
+live_loop :arp do
+  timesnum = 4
+  timesnum.times do
+    x = [62].tick
+    midi x, channel: 5, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+  timesnum.times do
+    x = [62, 57].tick
+    midi x, channel: 5, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+  timesnum.times do
+    x = [65].tick
+    midi x, channel: 5, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+  timesnum.times do
+    x = [65, 62].tick
+    midi x, channel: 5, port: "iac_driver_bus_1"
+    sleep 0.5
+  end
+end
+
+## Sad Loop Group
+
+##| live_loop :arp1 do
+##|   x = [60, 52, 60, 64].tick
+##|   midi x, channel: 6, port: "iac_driver_bus_1"
+##|   sleep [0.25].look
+##| end
+
+##| live_loop :arp do
+##|   timesnum = 4
+##|   timesnum.times do
+##|     x = [60].tick
+##|     midi x, channel: 5, port: "iac_driver_bus_1"
+##|     sleep 0.5
+##|   end
+##|   timesnum.times do
+##|     x = [60, 52].tick
+##|     midi x, channel: 5, port: "iac_driver_bus_1"
+##|     sleep 0.5
+##|   end
+##|   timesnum.times do
+##|     x = [64].tick
+##|     midi x, channel: 5, port: "iac_driver_bus_1"
+##|     sleep 0.5
+##|   end
+##|   timesnum.times do
+##|     x = [64, 60].tick
+##|     midi x, channel: 5, port: "iac_driver_bus_1"
+##|     sleep 0.5
+##|   end
+##| end
+
+## AI
+##| live_loop :arp do
+##|   # First section, starting on C
+##|   8.times do
+##|     x = [60, 62, 64, 67, 69, 67, 64, 62].tick  # C, D, E, G, A, G, E, D
+##|     midi x, channel: 5, port: "iac_driver_bus_1"
+##|     sleep 0.5
+##|   end
+##|   # Second section, focus on A minor (relative minor of C Major)
+##|   8.times do
+##|     x = [69, 67, 65, 64, 62, 60, 62, 64].tick  # A, G, F, E, D, C, D, E
+##|     midi x, channel: 5, port: "iac_driver_bus_1"
+##|     sleep 0.5
+##|   end
+##| end
+
+##| live_loop :arp1 do
+##|   x = [60, 62, 64, 67, 69, 71, 72, 71, 69, 67, 64, 62].tick  # A full ascent and descent
+##|   midi x, channel: 6, port: "iac_driver_bus_1"
+##|   sleep 0.25
+##| end
