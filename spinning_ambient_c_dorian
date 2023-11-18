@@ -1,0 +1,210 @@
+bpm = 120
+use_bpm bpm
+
+
+midi_scale = []
+
+
+##| key = "8B"
+key = "cdorian"
+##| key = "8A"
+##| key = "7B"
+
+##| key = "9A"
+##| key = "2A"
+##| key = "6A"
+##| key = "2B"
+##| key = "1A"
+
+if key == "8B" then
+  midi_scale = [48, 50, 52, 53, 55, 57, 59]
+end
+if key == "cdorian" then
+  midi_scale = [48, 50, 51, 53, 55, 57, 58]
+end
+if key == "8A" then
+  midi_scale = [57, 59, 60, 62, 64, 65, 67]
+end
+if key == "7B" then
+  midi_scale = [58, 60, 62, 63, 65, 67, 69]
+end
+if key == "2A" then
+  midi_scale = [51, 53, 54, 56, 58, 59, 61]
+end
+if key == "6A" then
+  midi_scale = [54, 56, 57, 59, 61, 63, 64]
+end
+if key == "2B" then
+  midi_scale = [54, 56, 58, 59, 61, 63, 65]
+end
+if key == "9A" then
+  midi_scale = [52, 54, 56, 57, 59, 61, 63]
+end
+if key == "1A" then
+  midi_scale = [44, 46, 47, 49, 51, 52, 54]
+end
+
+##| #bassline
+##| live_loop :synth0 do
+##|   channel = 1
+##|   midi midi_scale[0], channel: channel, port: "iac_driver_bus_1"
+##|   sleep 4.0
+##|   midi midi_scale[2], channel: channel, port: "iac_driver_bus_1"
+##|   sleep 2.0
+##|   midi midi_scale[2] - 12, channel: channel, port: "iac_driver_bus_1"
+##|   sleep 2.0
+##| end
+
+live_loop :synth0 do
+  channel = 1
+  root = midi_scale[0]
+  other = midi_scale[1] #2
+  sleep 0.5
+  live_loop :synth0_inner do
+    midi root, channel: channel, port: "iac_driver_bus_1"
+    sleep 1.0
+  end
+end
+
+live_loop :synthXAAW12 do
+  sleep 4
+  x = [midi_scale[0]+12].tick
+  midi x, channel: 14, port: "iac_driver_bus_1", sustain: 2
+  sleep 4
+end
+
+live_loop :synth3 do
+  channel = 4
+  sleep = 0.25 / 2
+  4.times do
+    x = [midi_scale[2]+12,midi_scale[0]+12,midi_scale[7],midi_scale[7]].tick
+    midi x, channel: channel, port: "iac_driver_bus_1", sustain: 1.0
+    sleep sleep
+  end
+  4.times do
+    x = [midi_scale[4]+12,midi_scale[0]+12,midi_scale[7],midi_scale[7]].tick
+    midi x, channel: channel, port: "iac_driver_bus_1", sustain: 1.0
+    sleep sleep
+  end
+  4.times do
+    x = [midi_scale[6]+12,midi_scale[0]+12,midi_scale[7],midi_scale[7]].tick
+    midi x, channel: channel, port: "iac_driver_bus_1", sustain: 1.0
+    sleep sleep
+  end
+  4.times do
+    x = [midi_scale[0]+24,midi_scale[0]+12,midi_scale[7],midi_scale[7]].tick
+    midi x, channel: channel, port: "iac_driver_bus_1", sustain: 1.0
+    sleep sleep
+  end
+end
+
+live_loop :clap do
+  channel = 6
+  sleep 2
+  midi midi_scale[0]-12, release: 1.0, channel: channel, port: "iac_driver_bus_1"
+  sleep 4
+  midi midi_scale[0]-12, release: 1.0, channel: channel, port: "iac_driver_bus_1"
+  sleep 2
+end
+
+
+live_loop :synth4 do
+  channel = 5
+  midi midi_scale[0]+12, channel: channel, port: "iac_driver_bus_1"
+  sleep 0.5
+end
+
+live_loop :synth1 do
+  channel = 2
+  x = [midi_scale[0]].tick
+  midi x, channel: channel, port: "iac_driver_bus_1"
+  sleep 2.0
+end
+
+live_loop :tick do
+  sync :synth1
+  channel = 700
+  channel = 7
+  sleep 0.5
+  live_loop :ticks_ssss do
+    midi midi_scale[0], release: 1.0, channel: channel, port: "iac_driver_bus_1"
+    sleep 1
+  end
+end
+
+live_loop :synth2 do
+  channel = 3
+  sleep 1
+  live_loop :synth2_inner do
+    x = [midi_scale[0]+12].tick
+    midi x, channel: channel, port: "iac_driver_bus_1", sustain: 2.0
+    sleep 8.0
+  end
+end
+
+live_loop :synth3123 do
+  channel = 8
+  4.times do
+    x = [midi_scale[0],midi_scale[2]+12,midi_scale[4],midi_scale[0]+12].tick
+    midi x, channel: channel, port: "iac_driver_bus_1", sustain: 2.5
+    sleep 2.0
+  end
+end
+
+live_loop :synthXsfinallls2 do
+  x = [midi_scale[0]+12].tick
+  midi x, channel: 16, port: "iac_driver_bus_1", sustain: 40
+  sleep 40
+end
+
+live_loop :synth3124 do
+  channel = 9
+  base_note = midi_scale[7] + 12 #0
+  middle_note = midi_scale[3] + 12 #3
+  high_note = midi_scale[7] + 24 #0
+  4.times do
+    x = [base_note, middle_note,midi_scale[4] + 12,high_note].tick
+    midi x - 12, channel: channel, port: "iac_driver_bus_1", sustain: 2.25
+    sleep 0.5
+  end
+  4.times do
+    x = [base_note, middle_note,midi_scale[4] + 12,high_note].reverse.tick
+    midi x - 12, channel: channel, port: "iac_driver_bus_1", sustain: 2.25
+    sleep 0.5
+  end
+end
+
+
+#0 2 2 4 6 5 4 3 2 1 0
+#7 0 4 6 0+12
+use_bpm 120
+midi_scale = [48, 50, 51, 53, 55, 57, 58] # C Dorian Scale | 7 notes | ["C3", "D3", "D#3/Eb3", "E3", "F3", "G3", "G#3/Ab3"]
+live_loop :ambientdemo do
+  channel = 12
+  4.times do
+    x = midi_scale[7]
+    midi x, channel: channel, port: "iac_driver_bus_1", sustain: [1.0, 0.8, 0.6].look
+    sleep 0.25
+  end
+  4.times do
+    x = midi_scale[0]+12
+    midi x + 12, channel: channel, port: "iac_driver_bus_1", sustain: [1.0, 0.8, 0.6].look
+    sleep 0.25
+  end
+end
+
+
+live_loop :synth324 do
+  channel = 10
+  4.times do
+    x = [midi_scale[0] + 12].tick
+    midi x, channel: channel, port: "iac_driver_bus_1"
+    sleep 0.25
+  end
+  4.times do
+    x = [midi_scale[0],midi_scale[2]].tick
+    midi x, channel: channel, port: "iac_driver_bus_1"
+    sleep 0.25
+  end
+end
+
